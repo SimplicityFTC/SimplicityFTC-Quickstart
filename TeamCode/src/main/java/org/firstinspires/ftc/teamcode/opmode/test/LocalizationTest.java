@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.opmode.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.simplicityftc.follower.MecanumDrive;
 import org.simplicityftc.util.math.Pose;
 
+@TeleOp(group = "Teleop Testers")
 public class LocalizationTest extends OpMode {
 
     private MecanumDrive mecanumDrive;
