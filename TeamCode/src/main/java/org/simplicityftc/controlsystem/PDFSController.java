@@ -8,6 +8,7 @@ public class PDFSController
     private double kStatic;
     private double lastError;
     private double errorThreshold;
+    private double target;
 
     public PDFSController(double kP, double kD, double kF, double kStatic) {
     }
@@ -26,20 +27,17 @@ public class PDFSController
         this.kStatic = pdfsConstants.getkS();
     }
 
+    public void setTarget(double target){
+        this.target = target;
+    }
+
+    public double calculate(double currentPosition) {
+        return 0;
+    }
+
     public double calculate(double currentPosition, double targetPosition) {
-        return 0;
-    }
-
-    public double calculate(double currentPosition, double targetPosition, double currentAngle) {
-        return 0;
-    }
-
-    public double calculate(int currentPosition, int targetPosition) {
-        return 0;
-    }
-
-    public double calculate(int currentPosition, int targetPosition, double currentAngle) {
-        return 0;
+        this.setTarget(targetPosition);
+        return calculate(currentPosition);
     }
 
     private double updateFeedforward(double currentAngle) {

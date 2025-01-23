@@ -4,9 +4,11 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.simplicityftc.controlsystem.Motor;
 import org.simplicityftc.controlsystem.PDFSController;
 import org.simplicityftc.follower.localizer.Localizer;
+import org.simplicityftc.util.SimpleVoltageSensor;
 import org.simplicityftc.util.math.Pose;
 
 public class MecanumDrive {
@@ -17,14 +19,18 @@ public class MecanumDrive {
         AUTONOMOUS
     }
 
+
     private DriveMode driveMode = DrivetrainSettings.driveMode;
     private final Localizer localizer = DrivetrainSettings.localizer;
 
     private boolean headingManuallyControlled = false;
-    private ElapsedTime headingTimer = new ElapsedTime();
+    private final ElapsedTime headingTimer = new ElapsedTime();
     private double headingVelocity = 0;
     private Pose lastPose = new Pose();
     private double targetHeading = 0;
+
+    private SimpleVoltageSensor simpleVoltageSensor;
+
 
     public MecanumDrive(HardwareMap hardwareMap){
         leftFront = new Motor(hardwareMap.get(DcMotor.class, DrivetrainSettings.leftFrontMotorName));
@@ -37,14 +43,17 @@ public class MecanumDrive {
         leftRear.setReversed(DrivetrainSettings.reverseLeftRearMotor);
         rightRear.setReversed(DrivetrainSettings.reverseRightRearMotor);
 
-        xController = new PDFSController(DrivetrainSettings.xConstants);
-        yController = new PDFSController(DrivetrainSettings.yConstants);
+        forwardController = new PDFSController(DrivetrainSettings.xConstants);
+        strafeController = new PDFSController(DrivetrainSettings.yConstants);
         headingController = new PDFSController(DrivetrainSettings.headingConstants);
+
+        simpleVoltageSensor = new SimpleVoltageSensor();
+        simpleVoltageSensor.init(hardwareMap);
     }
 
 
-    public PDFSController xController;
-    public PDFSController yController;
+    public PDFSController forwardController;
+    public PDFSController strafeController;
     public PDFSController headingController;
 
     private final Motor leftFront;
@@ -56,7 +65,23 @@ public class MecanumDrive {
         this.driveMode = driveMode;
     }
 
+    public Pose getPosition(){
+        return localizer.getPose();
+    }
+
+    public void setPosition(Pose pose){
+        localizer.setPose(pose);
+    }
+
+    public Pose getVelocity(){
+        return localizer.getVelocity();
+    }
+
     public void drive(double x, double y, double heading){
+        x *= DrivetrainSettings.translationalMaxPower;
+        y *= DrivetrainSettings.translationalMaxPower;
+        heading *= DrivetrainSettings.rotationalMaxPower;
+
         if(driveMode == DriveMode.FIELD_CENTRIC) {
             double rotated_x = x * Math.cos(localizer.getPose().getHeading()) - y * Math.sin(localizer.getPose().getHeading());
             double rotated_y = x * Math.sin(localizer.getPose().getHeading()) + y * Math.cos(localizer.getPose().getHeading());
@@ -66,7 +91,7 @@ public class MecanumDrive {
 
         if(heading != 0){
             headingManuallyControlled = true;
-            //heading += 0.1*Math.signum(heading); //compensate for static friction for more precise control
+            //heading += K_STATIC*Math.signum(heading); //compensate for static friction for more precise control?
         }else if(DrivetrainSettings.headingLock){
             if(headingVelocity < Math.toRadians(10) && headingManuallyControlled) {
                 headingManuallyControlled = false;
@@ -91,16 +116,54 @@ public class MecanumDrive {
     }
 
     public void update(){
-        xController.setConstants(DrivetrainSettings.xConstants);
-        yController.setConstants(DrivetrainSettings.yConstants);
+        forwardController.setConstants(DrivetrainSettings.xConstants);
+        strafeController.setConstants(DrivetrainSettings.yConstants);
         headingController.setConstants(DrivetrainSettings.headingConstants);
 
         headingVelocity = (lastPose.getHeading() - localizer.getPose().getHeading()) / headingTimer.seconds();
         headingTimer.reset();
+
+        localizer.update();
         lastPose = localizer.getPose();
 
         if(driveMode == DriveMode.AUTONOMOUS){
+            Pose targetPose = new Pose();
 
+            double fieldCentricXError = targetPose.sub(this.getPosition()).getX();
+            double fieldCentricYError = targetPose.sub(this.getPosition()).getY();
+
+            double robotCentricForwardError = Math.cos(-this.getPosition().getHeading()) * fieldCentricXError -
+                                                Math.sin(-this.getPosition().getHeading()) * fieldCentricYError;
+            double robotCentricStrafeError =  Math.sin(-this.getPosition().getHeading()) * fieldCentricXError -
+                                                Math.cos(-this.getPosition().getHeading()) * fieldCentricYError;
+            double headingTarget = 0;
+
+            forwardController.setTarget(0);
+            strafeController.setTarget(0);
+            headingController.setTarget(headingTarget);
+
+            double forwards_power = forwardController.calculate(-robotCentricForwardError);
+            double strafe_power = strafeController.calculate(-robotCentricStrafeError);
+            double headingPower = headingController.calculate(headingTarget + AngleUnit.normalizeRadians(headingTarget - getPosition().getHeading()));
+
+            double denominator = Math.max(Math.abs(forwards_power) + Math.abs(strafe_power) + Math.abs(headingPower), 1);
+
+            double leftFrontPower = (forwards_power - strafe_power - headingPower) / denominator;
+            double rightFrontPower = (forwards_power + strafe_power + headingPower) / denominator;
+            double leftRearPower = (forwards_power + strafe_power - headingPower) / denominator;
+            double rightRearPower = (forwards_power - strafe_power + headingPower) / denominator;
+
+            if(targetPose.sub(getPosition()).magnitude() > 2) { //TODO: tune this threshold
+                leftFrontPower = (leftFrontPower + Math.signum(leftFrontPower) * DrivetrainSettings.K_STATIC);
+                rightFrontPower = (rightFrontPower + Math.signum(rightFrontPower) * DrivetrainSettings.K_STATIC);
+                leftRearPower = (leftRearPower + Math.signum(leftRearPower) * DrivetrainSettings.K_STATIC);
+                rightRearPower = (rightRearPower + Math.signum(rightRearPower) * DrivetrainSettings.K_STATIC);
+            }
+
+            leftFront.setPower(leftFrontPower * 12 / SimpleVoltageSensor.getVoltage());
+            rightFront.setPower(rightFrontPower * 12 / SimpleVoltageSensor.getVoltage());
+            leftRear.setPower(leftRearPower * 12 / SimpleVoltageSensor.getVoltage());
+            rightRear.setPower(rightRearPower * 12 / SimpleVoltageSensor.getVoltage());
         }
 
         leftFront.update();

@@ -12,6 +12,11 @@ public class PinpointLocalizer implements Localizer{
     }
 
     @Override
+    public Pose getVelocity() {
+        return null;
+    }
+
+    @Override
     public void setPose(Pose pose) {
         lastPose = pose;
     }

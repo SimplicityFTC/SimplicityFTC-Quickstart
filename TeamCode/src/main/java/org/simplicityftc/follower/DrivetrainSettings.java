@@ -28,6 +28,8 @@ public class DrivetrainSettings {
     public static PDFSConstants xConstants = new PDFSConstants(0, 0, 0, 0);
     public static PDFSConstants yConstants = new PDFSConstants(0, 0, 0, 0);
     public static PDFSConstants headingConstants = new PDFSConstants(0, 0, 0, 0);
+    public static double K_STATIC = 0;
 
-
+    public static double translationalMaxPower = 1;
+    public static double rotationalMaxPower = 1;
 }

@@ -42,6 +42,13 @@ public class Pose {
     }
 
     /**
+     * @return magnitude of the positional vector
+     */
+    public double magnitude(){
+        return Math.sqrt(this.x * this.x + this.y * this.y);
+    }
+
+    /**
      * @param scalar scalar to multiply the positional vector with
      * @return a new Pose with the position vector scaled
      */
