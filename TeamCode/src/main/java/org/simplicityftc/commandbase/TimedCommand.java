@@ -26,6 +26,6 @@ public class TimedCommand extends Command {
             timer = new ElapsedTime();
 
         //TODO: test if this works
-        return timer.seconds() < timeoutSeconds || function.run().equals(true);
+        return timer.seconds() >= timeoutSeconds || function.run().equals(true);
     }
 }
