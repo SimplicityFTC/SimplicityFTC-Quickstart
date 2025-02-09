@@ -8,19 +8,19 @@ public class MotionProfile
     private final double targetPosition;
     private final ProfileConstraints constraints;
 
-    public MotionProfile(double startPosition, double targetPosition, ProfileConstraints constraints){
+    public MotionProfile(double startPosition, double targetPosition, ProfileConstraints constraints) {
         this.startPosition = startPosition;
         this.targetPosition = targetPosition;
         this.constraints = constraints;
     }
 
-    public double getPosition(){
+    public double getPosition() {
         return 0;
     }
-    public double getVelocity(){
+    public double getVelocity() {
         return 0;
     }
-    public double getAcceleration(){
+    public double getAcceleration() {
         return 0;
     }
 }

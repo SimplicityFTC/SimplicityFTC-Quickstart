@@ -10,8 +10,7 @@ public class PDFSController
     private double errorThreshold;
     private double target;
 
-    public PDFSController(double kP, double kD, double kF, double kStatic) {
-    }
+    public PDFSController(double kP, double kD, double kF, double kStatic) { }
 
     public PDFSController(PDFSConstants pdfsConstants) {
         this.kP = pdfsConstants.getkP();
@@ -20,14 +19,14 @@ public class PDFSController
         this.kStatic = pdfsConstants.getkS();
     }
 
-    public void setConstants(PDFSConstants pdfsConstants){
+    public void setConstants(PDFSConstants pdfsConstants) {
         this.kP = pdfsConstants.getkP();
         this.kD = pdfsConstants.getkD();
         this.kF = pdfsConstants.getkF();
         this.kStatic = pdfsConstants.getkS();
     }
 
-    public void setTarget(double target){
+    public void setTarget(double target) {
         this.target = target;
     }
 

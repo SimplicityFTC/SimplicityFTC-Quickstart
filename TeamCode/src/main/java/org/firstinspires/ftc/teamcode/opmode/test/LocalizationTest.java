@@ -8,7 +8,6 @@ import org.simplicityftc.util.math.Pose;
 
 @TeleOp(group = "Teleop Testers")
 public class LocalizationTest extends OpMode {
-
     private MecanumDrive mecanumDrive;
 
     private final Pose startPose = new Pose(0, 0, 0);
@@ -17,16 +16,17 @@ public class LocalizationTest extends OpMode {
 
     @Override
     public void init() {
-        mecanumDrive = new MecanumDrive(hardwareMap);
+        mecanumDrive = new MecanumDrive();
         mecanumDrive.setPosition(startPose);
     }
 
     @Override
     public void loop() {
-        if(ROTATE_USING_TRIGGERS)
+        if(ROTATE_USING_TRIGGERS) {
             mecanumDrive.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.left_trigger - gamepad1.right_trigger);
-        else
+        } else {
             mecanumDrive.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, -gamepad1.right_stick_x);
+        }
 
         telemetry.addData("x (cm)", mecanumDrive.getPosition().getX());
         telemetry.addData("y (cm)", mecanumDrive.getPosition().getY());

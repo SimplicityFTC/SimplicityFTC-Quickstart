@@ -19,7 +19,7 @@ public class DrivetrainStaticFeedforwardTuner extends OpMode {
 
     @Override
     public void init() {
-        mecanumDrive = new MecanumDrive(hardwareMap);
+        mecanumDrive = new MecanumDrive();
 
         timer = new ElapsedTime();
 
@@ -31,13 +31,13 @@ public class DrivetrainStaticFeedforwardTuner extends OpMode {
 
     @Override
     public void loop() {
-        if(!mecanumDrive.getVelocity().equals(new Pose()) && iterationsLeft != 0){
+        if(!mecanumDrive.getVelocity().equals(new Pose()) && iterationsLeft != 0) {
             kStatic += lastSetPower;
 
             iterationsLeft -= 1;
             lastSetPower = 0;
 
-            if(iterationsLeft == 0){
+            if(iterationsLeft == 0) {
                 telemetry.addData("Tuned KSTATIC", kStatic / 10);
                 telemetry.update();
             }
@@ -45,13 +45,14 @@ public class DrivetrainStaticFeedforwardTuner extends OpMode {
 
         lastSetPower += timer.seconds() * kStaticIncrementPerSecond;
 
-        if(iterationsLeft != 0)
-            mecanumDrive.setMotorPowers(lastSetPower * Math.signum((iterationsLeft + 1) % 2 - 0.5),
+        if(iterationsLeft != 0) {
+            mecanumDrive.setMotorPowers( lastSetPower * Math.signum((iterationsLeft + 1) % 2 - 0.5),
                                         lastSetPower * Math.signum((iterationsLeft + 1) % 2 - 0.5),
-                                        lastSetPower * Math.signum((iterationsLeft + 1) % 2 - 0.5),
+                                         lastSetPower * Math.signum((iterationsLeft + 1) % 2 - 0.5),
                                         lastSetPower * Math.signum((iterationsLeft + 1) % 2 - 0.5));
-        else
+        } else {
             mecanumDrive.setMotorPowers(0, 0, 0, 0);
+        }
 
         mecanumDrive.update();
     }

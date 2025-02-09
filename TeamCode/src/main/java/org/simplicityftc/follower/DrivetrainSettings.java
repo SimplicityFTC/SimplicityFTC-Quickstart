@@ -1,27 +1,33 @@
 package org.simplicityftc.follower;
 
 import org.simplicityftc.controlsystem.PDFSConstants;
+import org.simplicityftc.electronics.Hub;
 import org.simplicityftc.follower.localizer.Localizer;
 import org.simplicityftc.follower.localizer.PinpointLocalizer;
 
 //@Config
 public class DrivetrainSettings {
-    public static final String leftFrontMotorName = "leftFront";
-    public static final String rightFrontMotorName = "rightFront";
-    public static final String leftRearMotorName = "leftRear";
-    public static final String rightRearMotorName = "rightRear";
 
-    public static final boolean reverseLeftFrontMotor = true;
+    public static final Hub drivetrainMotorsHub = Hub.CONTROL_HUB;
+    public static final int leftFrontMotorPort = 0;
+    public static final int rightFrontMotorPort = 1;
+    public static final int leftRearMotorPort = 2;
+    public static final int rightRearMotorPort = 3;
+
+    public static final boolean reverseLeftFrontMotor = false;
     public static final boolean reverseRightFrontMotor = true;
-    public static final boolean reverseLeftRearMotor = true;
+    public static final boolean reverseLeftRearMotor = false;
     public static final boolean reverseRightRearMotor = true;
 
-    private static final String leftParallelEncoderName = "leftParallelEncoder";
-    private static final String perpendicularEncoderName = "perpendicularEncoder";
-    private static final String rightParallelEncoderName = "rightParallelEncoder";
+    public static final Hub odometryEncodersHub = Hub.CONTROL_HUB;
+    private static final int leftParallelEncoderPort = 0;
+    private static final int perpendicularEncoderPort = 1;
+    private static final int rightParallelEncoderPort = 2;
 
     public static final MecanumDrive.DriveMode driveMode = MecanumDrive.DriveMode.ROBOT_CENTRIC;
     public static final boolean headingLock = false;
+
+    public static final boolean coastInTeleop = false;
 
     public static final Localizer localizer = new PinpointLocalizer();
 

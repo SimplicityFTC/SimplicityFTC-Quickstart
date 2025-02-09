@@ -26,21 +26,24 @@ public class MotorWheelDirectionDebugger extends OpMode {
     ElapsedTime timer;
     @Override
     public void init() {
-        mecanumDrive = new MecanumDrive(hardwareMap);
+        mecanumDrive = new MecanumDrive();
         mecanumDrive.setDriveMode(MecanumDrive.DriveMode.ROBOT_CENTRIC);
         timer = new ElapsedTime();
     }
 
     @Override
     public void loop() {
-        if(timer.seconds() >= 8)
+        if(timer.seconds() >= 8) {
             timer.reset();
+        }
+
         mecanumDrive.setMotorPowers(
                 (timer.seconds() <= 1) ? 0.7 : 0,
                 (Math.abs(timer.seconds() -2.5) <= 0.5) ? 0.7 : 0,
                 (Math.abs(timer.seconds() - 4.5) <= 0.5) ? 0.7 : 0,
                 (Math.abs(timer.seconds() - 6.5) <= 0.5) ? 0.7 : 0
         );
+
         mecanumDrive.update();
     }
 }

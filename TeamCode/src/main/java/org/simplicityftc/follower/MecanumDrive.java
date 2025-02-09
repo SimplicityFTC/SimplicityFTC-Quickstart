@@ -1,24 +1,22 @@
 package org.simplicityftc.follower;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.simplicityftc.controlsystem.Motor;
+import org.simplicityftc.electronics.Hub;
+import org.simplicityftc.electronics.Motor;
 import org.simplicityftc.controlsystem.PDFSController;
 import org.simplicityftc.follower.localizer.Localizer;
-import org.simplicityftc.util.SimpleVoltageSensor;
+import org.simplicityftc.electronics.SimpleVoltageSensor;
 import org.simplicityftc.util.math.Pose;
 
 public class MecanumDrive {
-
-    public enum DriveMode{
+    public enum DriveMode {
         FIELD_CENTRIC,
         ROBOT_CENTRIC,
         AUTONOMOUS
     }
-
 
     private DriveMode driveMode = DrivetrainSettings.driveMode;
     private final Localizer localizer = DrivetrainSettings.localizer;
@@ -29,14 +27,11 @@ public class MecanumDrive {
     private Pose lastPose = new Pose();
     private double targetHeading = 0;
 
-    private SimpleVoltageSensor simpleVoltageSensor;
-
-
-    public MecanumDrive(HardwareMap hardwareMap){
-        leftFront = new Motor(hardwareMap.get(DcMotor.class, DrivetrainSettings.leftFrontMotorName));
-        rightFront = new Motor(hardwareMap.get(DcMotor.class, DrivetrainSettings.rightFrontMotorName));
-        leftRear = new Motor(hardwareMap.get(DcMotor.class, DrivetrainSettings.leftRearMotorName));
-        rightRear = new Motor(hardwareMap.get(DcMotor.class, DrivetrainSettings.rightRearMotorName));
+    public MecanumDrive() {
+        leftFront = new Motor(Hub.CONTROL_HUB, DrivetrainSettings.leftFrontMotorPort);
+        rightFront = new Motor(Hub.CONTROL_HUB, DrivetrainSettings.rightFrontMotorPort);
+        leftRear = new Motor(Hub.CONTROL_HUB, DrivetrainSettings.leftRearMotorPort);
+        rightRear = new Motor(Hub.CONTROL_HUB, DrivetrainSettings.rightRearMotorPort);
 
         leftFront.setReversed(DrivetrainSettings.reverseLeftFrontMotor);
         rightFront.setReversed(DrivetrainSettings.reverseRightFrontMotor);
@@ -46,11 +41,7 @@ public class MecanumDrive {
         forwardController = new PDFSController(DrivetrainSettings.xConstants);
         strafeController = new PDFSController(DrivetrainSettings.yConstants);
         headingController = new PDFSController(DrivetrainSettings.headingConstants);
-
-        simpleVoltageSensor = new SimpleVoltageSensor();
-        simpleVoltageSensor.init(hardwareMap);
     }
-
 
     public PDFSController forwardController;
     public PDFSController strafeController;
@@ -61,23 +52,23 @@ public class MecanumDrive {
     private final Motor leftRear;
     private final Motor rightRear;
 
-    public void setDriveMode(DriveMode driveMode){
+    public void setDriveMode(DriveMode driveMode) {
         this.driveMode = driveMode;
     }
 
-    public Pose getPosition(){
+    public Pose getPosition() {
         return localizer.getPose();
     }
 
-    public void setPosition(Pose pose){
+    public void setPosition(Pose pose) {
         localizer.setPose(pose);
     }
 
-    public Pose getVelocity(){
+    public Pose getVelocity() {
         return localizer.getVelocity();
     }
 
-    public void drive(double x, double y, double heading){
+    public void drive(double x, double y, double heading) {
         x *= DrivetrainSettings.translationalMaxPower;
         y *= DrivetrainSettings.translationalMaxPower;
         heading *= DrivetrainSettings.rotationalMaxPower;
@@ -89,10 +80,10 @@ public class MecanumDrive {
             y = rotated_y;
         }
 
-        if(heading != 0){
+        if(heading != 0) {
             headingManuallyControlled = true;
             //heading += K_STATIC*Math.signum(heading); //compensate for static friction for more precise control?
-        }else if(DrivetrainSettings.headingLock){
+        } else if(DrivetrainSettings.headingLock) {
             if(headingVelocity < Math.toRadians(10) && headingManuallyControlled) {
                 headingManuallyControlled = false;
                 targetHeading = localizer.getPose().getHeading();
@@ -108,14 +99,14 @@ public class MecanumDrive {
         rightRear.setPower((x - y + heading) / denominator);
     }
 
-    public void setMotorPowers(double leftFront, double rightFront, double leftRear, double rightRear){
+    public void setMotorPowers(double leftFront, double rightFront, double leftRear, double rightRear) {
         this.leftFront.setPower(leftFront);
         this.rightFront.setPower(rightFront);
         this.leftRear.setPower(leftRear);
         this.rightRear.setPower(rightRear);
     }
 
-    public void update(){
+    public void update() {
         forwardController.setConstants(DrivetrainSettings.xConstants);
         strafeController.setConstants(DrivetrainSettings.yConstants);
         headingController.setConstants(DrivetrainSettings.headingConstants);
@@ -126,7 +117,7 @@ public class MecanumDrive {
         localizer.update();
         lastPose = localizer.getPose();
 
-        if(driveMode == DriveMode.AUTONOMOUS){
+        if(driveMode == DriveMode.AUTONOMOUS) {
             Pose targetPose = new Pose();
 
             double fieldCentricXError = targetPose.sub(this.getPosition()).getX();

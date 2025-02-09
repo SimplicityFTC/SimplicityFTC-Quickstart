@@ -12,7 +12,7 @@ public class Pose {
      * @param y y coordinate of position vector
      * @param heading rotation of position vector
      */
-    public Pose(double x, double y, double heading){
+    public Pose(double x, double y, double heading) {
         this.x = x;
         this.y = y;
         this.heading = heading;
@@ -22,14 +22,14 @@ public class Pose {
      * @param x x coordinate of position vector
      * @param y y coordinate of position vector
      */
-    public Pose(double x, double y){
+    public Pose(double x, double y) {
         this(x, y, 0);
     }
 
     /**
      * Returns a pose with coordinates (0, 0) and heading [0]
      */
-    public Pose(){
+    public Pose() {
         this(0, 0);
     }
 
@@ -37,14 +37,14 @@ public class Pose {
      * @param pose pose to add to the old one
      * @return a new Pose with the position vector added
      */
-    public Pose add(@NonNull Pose pose){
+    public Pose add(@NonNull Pose pose) {
         return new Pose(this.x + pose.x, this.y + pose.y, this.heading + pose.heading);
     }
 
     /**
      * @return magnitude of the positional vector
      */
-    public double magnitude(){
+    public double magnitude() {
         return Math.sqrt(this.x * this.x + this.y * this.y);
     }
 
@@ -60,7 +60,7 @@ public class Pose {
      * @param pose pose to subtract from the old one
      * @return a new Pose with the position vector subtracted
      */
-    public Pose sub(@NonNull Pose pose){
+    public Pose sub(@NonNull Pose pose) {
         return new Pose(this.x - pose.x, this.y - pose.y, this.heading - pose.heading);
     }
 
@@ -68,7 +68,7 @@ public class Pose {
      * @param radians angle to rotate the positional vector with
      * @return a new Pose with the position vector rotated by the parameter
      */
-    public Pose rotate(double radians){
+    public Pose rotate(double radians) {
         return new Pose(this.x * Math.cos(radians) - this.y * Math.sin(radians),
                         this.x * Math.sin(radians) + this.y * Math.cos(radians),
                         this.heading);

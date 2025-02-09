@@ -22,7 +22,7 @@ public class BezierPath implements Path{
         }
     }
 
-    private Pose get(double t){
+    private Pose get(double t) {
         return endPose.scale(t * t * t).add(
                 controlPoint2.scale(3.0 * (1.0 - t) * t * t)).add(
                 controlPoint1.scale(3.0 * (1.0 - t) * (1.0 - t) * t)).add(
@@ -31,7 +31,6 @@ public class BezierPath implements Path{
 
     @Override
     public Pose getClosestPose(Pose pose) {
-
         return new Pose();
     }
 

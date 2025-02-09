@@ -6,7 +6,7 @@ public class PDFSConstants {
     private final double kF;
     private final double kS;
 
-    public PDFSConstants(double kP, double kD, double kF, double kS){
+    public PDFSConstants(double kP, double kD, double kF, double kS) {
         this.kP = kP;
         this.kD = kD;
         this.kF = kF;
