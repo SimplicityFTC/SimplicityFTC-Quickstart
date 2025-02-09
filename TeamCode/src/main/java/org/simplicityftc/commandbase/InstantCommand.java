@@ -24,5 +24,10 @@ public class InstantCommand extends Command {
         voidFunction.run();
         return true;
     }
+
+    @Override
+    public void log() {
+
+    }
 }
 

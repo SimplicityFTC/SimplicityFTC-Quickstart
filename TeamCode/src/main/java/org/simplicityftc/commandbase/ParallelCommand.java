@@ -41,4 +41,9 @@ public class ParallelCommand extends Command {
 
         return false;
     }
+
+    @Override
+    public void log() {
+
+    }
 }

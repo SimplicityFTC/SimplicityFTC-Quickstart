@@ -24,4 +24,9 @@ public class SleepCommand extends Command {
         //TODO: test if this works
         return timer.seconds() >= timeoutSeconds;
     }
+
+    @Override
+    public void log() {
+
+    }
 }

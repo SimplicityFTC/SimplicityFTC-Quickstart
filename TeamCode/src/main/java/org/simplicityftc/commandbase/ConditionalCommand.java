@@ -16,4 +16,10 @@ public class ConditionalCommand extends Command {
     public boolean run() {
         return function.run();
     }
+
+    @Override
+    public void log() {
+
+    }
+
 }

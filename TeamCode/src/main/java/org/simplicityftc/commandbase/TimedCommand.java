@@ -28,4 +28,9 @@ public class TimedCommand extends Command {
         //TODO: test if this works
         return timer.seconds() >= timeoutSeconds || function.run().equals(true);
     }
+
+    @Override
+    public void log() {
+
+    }
 }

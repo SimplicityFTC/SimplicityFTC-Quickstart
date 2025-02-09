@@ -19,5 +19,10 @@ public class WaitUntilCommand extends Command {
     {
         return booleanFunction.run();
     }
+
+    @Override
+    public void log() {
+
+    }
 }
 

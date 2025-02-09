@@ -2,7 +2,9 @@ package org.simplicityftc.commandbase;
 
 import androidx.annotation.NonNull;
 
-public abstract class Command implements Cloneable {
+import org.simplicityftc.logger.Loggable;
+
+public abstract class Command implements Cloneable, Loggable {
     /**
      * Runs the command
      * @return true if the command finished, false if it needs to be run again
@@ -21,4 +23,6 @@ public abstract class Command implements Cloneable {
             throw new AssertionError();
         }
     }
+
+    public abstract void log();
 }

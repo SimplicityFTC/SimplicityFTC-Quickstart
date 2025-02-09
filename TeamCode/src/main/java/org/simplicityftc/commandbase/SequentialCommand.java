@@ -35,4 +35,9 @@ public class SequentialCommand extends Command {
 
         return false;
     }
+
+    @Override
+    public void log() {
+
+    }
 }
