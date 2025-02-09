@@ -14,9 +14,16 @@ public class TimedCommand extends Command {
     private final double timeoutSeconds;
     private final LambdaFunction<?> function;
 
-    public TimedCommand(LambdaFunction<?> function, double timeoutSeconds)
-    {
+    public TimedCommand(LambdaFunction<?> function, double timeoutSeconds) {
         this.function = function;
+        this.timeoutSeconds = timeoutSeconds;
+    }
+
+    public TimedCommand(Runnable function, double timeoutSeconds) {
+        this.function = () -> {
+            function.run();
+            return null;
+        };
         this.timeoutSeconds = timeoutSeconds;
     }
 

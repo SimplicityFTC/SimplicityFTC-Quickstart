@@ -13,14 +13,19 @@ public class InstantCommand extends Command {
 
     private final LambdaFunction<Void> voidFunction;
 
-    public InstantCommand (LambdaFunction<Void> voidFunction)
-    {
+    public InstantCommand (LambdaFunction<Void> voidFunction) {
         this.voidFunction = voidFunction;
     }
 
+    public InstantCommand(Runnable voidFunction) {
+        this.voidFunction = () -> {
+            voidFunction.run();
+            return null;
+        };
+    }
+
     @Override
-    public boolean run()
-    {
+    public boolean run() {
         voidFunction.run();
         return true;
     }

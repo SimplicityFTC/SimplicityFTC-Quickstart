@@ -25,8 +25,7 @@ public class SequentialCommand extends Command {
     }
 
     @Override
-    public boolean run()
-    {
+    public boolean run() {
         if (commands.isEmpty())
             return true;
 

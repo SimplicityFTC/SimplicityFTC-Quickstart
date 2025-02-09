@@ -6,17 +6,14 @@ package org.simplicityftc.commandbase;
  */
 
 public class WaitUntilCommand extends Command {
-
     private final LambdaFunction<Boolean> booleanFunction;
 
-    public WaitUntilCommand (LambdaFunction<Boolean> booleanFunction)
-    {
+    public WaitUntilCommand (LambdaFunction<Boolean> booleanFunction) {
         this.booleanFunction = booleanFunction;
     }
 
     @Override
-    public boolean run()
-    {
+    public boolean run() {
         return booleanFunction.run();
     }
 

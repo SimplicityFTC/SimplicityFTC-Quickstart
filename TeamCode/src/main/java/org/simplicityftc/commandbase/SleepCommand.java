@@ -11,8 +11,7 @@ public class SleepCommand extends Command {
     private ElapsedTime timer;
     private final double timeoutSeconds;
 
-    public SleepCommand(LambdaFunction<?> function, double timeoutSeconds)
-    {
+    public SleepCommand(double timeoutSeconds) {
         this.timeoutSeconds = timeoutSeconds;
     }
 

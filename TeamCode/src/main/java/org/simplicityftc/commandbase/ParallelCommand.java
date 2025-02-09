@@ -15,19 +15,16 @@ public class ParallelCommand extends Command {
     private final ArrayList<Command> commands;
     private ArrayList<Command> removedCommands;
 
-    public ParallelCommand (List<Command> commands)
-    {
+    public ParallelCommand (List<Command> commands) {
         this.commands = new ArrayList<>(commands);
     }
 
-    public ParallelCommand (Command... commands)
-    {
+    public ParallelCommand (Command... commands) {
         this(Arrays.asList(commands));
     }
 
     @Override
-    public boolean run()
-    {
+    public boolean run() {
         if (commands.isEmpty())
             return true;
 
