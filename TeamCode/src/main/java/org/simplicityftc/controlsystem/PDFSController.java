@@ -1,7 +1,6 @@
 package org.simplicityftc.controlsystem;
 
-public class PDFSController
-{
+public class PDFSController {
     private double kP;
     private double kD;
     private double kF;

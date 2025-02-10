@@ -12,24 +12,42 @@ import java.util.List;
  * CommandType should be replaced by whatever type of command you want (ConditionalCommand, InstantCommand, ParallelCommand or SequentialCommand);
  */
 public class SequentialCommand extends Command {
-    private final ArrayList<Command> commands;
+    private final List<Command> commands;
 
+    /**
+     * If using a list of commands:
+     * @param commands The list of commands to run
+     */
     public SequentialCommand(List<Command> commands)
     {
         this.commands = new ArrayList<>(commands);
     }
 
+    /**
+     * If using an array of commands:
+     * @param commandName The name of the command
+     * @param commands The array of commands to run
+     */
     public SequentialCommand(String commandName, List<Command> commands)
     {
         super(commandName);
         this.commands = new ArrayList<>(commands);
     }
 
+    /**
+     * If using an array of commands:
+     * @param commands The array of commands to run
+     */
     public SequentialCommand(Command... commands)
     {
         this(Arrays.asList(commands));
     }
 
+    /**
+     * If using an array of commands:
+     * @param commandName The name of the command
+     * @param commands The array of commands to run
+     */
     public SequentialCommand(String commandName, Command... commands)
     {
         this(commandName, Arrays.asList(commands));

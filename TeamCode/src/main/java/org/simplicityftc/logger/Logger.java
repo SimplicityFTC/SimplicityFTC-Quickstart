@@ -1,5 +1,7 @@
 package org.simplicityftc.logger;
 
+import androidx.annotation.NonNull;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -18,8 +20,46 @@ public class Logger {
     private FileWriter fileWriter = null;
     private static final SimpleDateFormat SDF = new SimpleDateFormat("HH:mm:ss", Locale.US);
 
-    private Logger() {
+    /**
+     * This enum is used to specify the type of log message.
+     */
+    public enum LogType {
+        INFO,
+        DEBUG,
+        WARN,
+        ERROR,
+        COMMAND,
+        VOLTAGE,
+        OVER_CURRENT,
+        REFRESH_RATE;
+
+        @NonNull
+        @Override
+        public String toString() {
+            switch (this) {
+                case INFO:
+                    return "[INFO]";
+                case DEBUG:
+                    return "[DEBUG]";
+                case WARN:
+                    return "[WARN]";
+                case ERROR:
+                    return "[ERROR]";
+                case COMMAND:
+                    return "[COMMAND]";
+                case VOLTAGE:
+                    return "[VOLTAGE]";
+                case OVER_CURRENT:
+                    return "[OVER_CURRENT]";
+                case REFRESH_RATE:
+                    return "[REFRESH_RATE]";
+                default:
+                    throw new IllegalArgumentException("How did you manage this? 💀");
+            }
+        }
     }
+
+    private Logger() { }
 
     /**
      * This method returns the singleton instance of the Logger.
@@ -43,9 +83,10 @@ public class Logger {
 
     /**
      * This method adds a message to the log file.
+     * The log file name defaults as log.txt.
      * @param message The message to add to the log file.
      */
-    public void add(LogMessage message) {
+    public void add(LogType logType, String message) {
         if (logFile == null) {
             logFile = new File("log.txt");
         }
@@ -58,11 +99,11 @@ public class Logger {
             if (fileWriter == null) {
                 fileWriter = new FileWriter(logFile, true);
             }
-            //TODO ACTUALLY CHECK FORMAT I JUST THREW THIS TOGETHER WITH 0 BRAIN
             fileWriter.write(
-                    SDF.format(new Date(System.currentTimeMillis()) + " ")
-                        + message.getType() + " "
-                        + message.getContent() + "\n");
+                    logType.toString() + " "
+                        + SDF.format(new Date(System.currentTimeMillis())) + " "
+                        + message + "\n"
+            );
             fileWriter.close();
         } catch (IOException ignored) { }
     }

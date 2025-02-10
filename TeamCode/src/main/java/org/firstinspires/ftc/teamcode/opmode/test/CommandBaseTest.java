@@ -6,7 +6,6 @@ import org.simplicityftc.commandbase.SleepCommand;
 import org.simplicityftc.commandbase.TimedCommand;
 import org.simplicityftc.commandbase.WaitUntilCommand;
 import org.simplicityftc.electronics.SimpleVoltageSensor;
-import org.simplicityftc.logger.LogMessage;
 import org.simplicityftc.logger.Logger;
 import org.simplicityftc.util.SimpleOpMode;
 
@@ -25,7 +24,7 @@ public class CommandBaseTest extends SimpleOpMode {
                 new TimedCommand(() -> System.out.printf("whatever"), 10),
                 new WaitUntilCommand(() -> getRuntime() > 25),
                 timedCommand,
-                new InstantCommand(() -> Logger.getInstance().add(new LogMessage().setContent(String.format("%.2f", SimpleVoltageSensor.getVoltage())))),
+                new InstantCommand(() -> Logger.getInstance().add(Logger.LogType.INFO, "Skibidi Toilet or Creeper?")),
                 new SleepCommand(0.5)
         ));
     }

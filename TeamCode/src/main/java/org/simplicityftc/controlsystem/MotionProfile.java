@@ -1,9 +1,6 @@
 package org.simplicityftc.controlsystem;
 
-import com.qualcomm.robotcore.util.ElapsedTime;
-
-public class MotionProfile
-{
+public class MotionProfile {
     private final double startPosition;
     private final double targetPosition;
     private final ProfileConstraints constraints;

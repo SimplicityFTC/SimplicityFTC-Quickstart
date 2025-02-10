@@ -14,17 +14,33 @@ public class TimedCommand extends Command {
     private final double timeoutSeconds;
     private final LambdaFunction<?> function;
 
+    /**
+     * Allows any function and will return true if the timeout is reached
+     * @param function The function to run
+     * @param timeoutSeconds The amount of time to wait
+     */
     public TimedCommand(LambdaFunction<?> function, double timeoutSeconds) {
         this.function = function;
         this.timeoutSeconds = timeoutSeconds;
     }
 
+    /**
+     * Allows any function and will return true if the timeout is reached
+     * @param commandName The name of the command
+     * @param function The function to run
+     * @param timeoutSeconds The amount of time to wait
+     */
     public TimedCommand(String commandName, LambdaFunction<?> function, double timeoutSeconds) {
         super(commandName);
         this.function = function;
         this.timeoutSeconds = timeoutSeconds;
     }
 
+    /**
+     * Allows any function and will return true if the timeout is reached
+     * @param function The function to run
+     * @param timeoutSeconds The amount of time to wait
+     */
     public TimedCommand(Runnable function, double timeoutSeconds) {
         this.function = () -> {
             function.run();
@@ -33,6 +49,12 @@ public class TimedCommand extends Command {
         this.timeoutSeconds = timeoutSeconds;
     }
 
+    /**
+     * Allows any function and will return true if the timeout is reached
+     * @param commandName The name of the command
+     * @param function The function to run
+     * @param timeoutSeconds The amount of time to wait
+     */
     public TimedCommand(String commandName, Runnable function, double timeoutSeconds) {
         super(commandName);
         this.function = () -> {

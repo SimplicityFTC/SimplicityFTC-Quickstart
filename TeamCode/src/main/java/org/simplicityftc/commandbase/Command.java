@@ -28,6 +28,10 @@ public abstract class Command implements Cloneable {
         }
     }
 
+    /**
+     * Gets the name of the command
+     * @return the name of the command
+     */
     public String getCommandName() {
         return commandName;
     }

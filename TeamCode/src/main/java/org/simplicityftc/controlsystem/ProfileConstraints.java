@@ -1,7 +1,6 @@
 package org.simplicityftc.controlsystem;
 
-public class ProfileConstraints
-{
+public class ProfileConstraints {
     private final double max_acceleration;
     private final double max_velocity;
     private final double max_deceleration;

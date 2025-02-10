@@ -17,9 +17,6 @@ public class SimpleVoltageSensor {
             timer.reset();
             lastReadVoltage = Hub.CONTROL_HUB.getLynxModule().getInputVoltage(VoltageUnit.VOLTS);
         }
-
-        //TODO: log
-
         return lastReadVoltage;
     }
 }
