@@ -14,13 +14,13 @@ public class CommandBaseTest extends SimpleOpMode {
     TimedCommand timedCommand = new TimedCommand(() -> System.out.printf("sigma"), 10);
 
     @Override
-    public void initialize(){ }
+    public void onInit(){ }
 
     @Override
     public void initialize_loop(){ }
 
     @Override
-    public void start(){
+    public void onStart(){
         commandScheduler.schedule(new SequentialCommand(
                 new TimedCommand(() -> System.out.printf("whatever"), 10),
                 new WaitUntilCommand(() -> getRuntime() > 25),

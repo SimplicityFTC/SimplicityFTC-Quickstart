@@ -42,8 +42,8 @@ public abstract class SimpleOpMode extends LinearOpMode {
         while (opModeIsActive() && !isStopRequested()) {
             run();
             CommandScheduler.getInstance().run();
-            Hub.CONTROL_HUB.getLynxModule().clearBulkCache();
-            Hub.EXPANSION_HUB.getLynxModule().clearBulkCache();
+            Hub.CONTROL_HUB.readData();
+            Hub.EXPANSION_HUB.readData();
             //TODO: Log update rate
         }
     }

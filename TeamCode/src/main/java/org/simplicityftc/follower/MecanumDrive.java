@@ -3,8 +3,7 @@ package org.simplicityftc.follower;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.simplicityftc.electronics.Hub;
-import org.simplicityftc.electronics.Motor;
+import org.simplicityftc.electronics.SimpleMotor;
 import org.simplicityftc.controlsystem.PDFSController;
 import org.simplicityftc.follower.localizer.Localizer;
 import org.simplicityftc.electronics.SimpleVoltageSensor;
@@ -27,10 +26,10 @@ public class MecanumDrive {
     private double targetHeading = 0;
 
     public MecanumDrive() {
-        leftFront = new Motor(Hub.CONTROL_HUB, DrivetrainSettings.leftFrontMotorPort);
-        rightFront = new Motor(Hub.CONTROL_HUB, DrivetrainSettings.rightFrontMotorPort);
-        leftRear = new Motor(Hub.CONTROL_HUB, DrivetrainSettings.leftRearMotorPort);
-        rightRear = new Motor(Hub.CONTROL_HUB, DrivetrainSettings.rightRearMotorPort);
+        leftFront = new SimpleMotor(DrivetrainSettings.DRIVETRAIN_MOTORS_SIMPLE_HUB, DrivetrainSettings.leftFrontMotorPort);
+        rightFront = new SimpleMotor(DrivetrainSettings.DRIVETRAIN_MOTORS_SIMPLE_HUB, DrivetrainSettings.rightFrontMotorPort);
+        leftRear = new SimpleMotor(DrivetrainSettings.DRIVETRAIN_MOTORS_SIMPLE_HUB, DrivetrainSettings.leftRearMotorPort);
+        rightRear = new SimpleMotor(DrivetrainSettings.DRIVETRAIN_MOTORS_SIMPLE_HUB, DrivetrainSettings.rightRearMotorPort);
 
         leftFront.setReversed(DrivetrainSettings.reverseLeftFrontMotor);
         rightFront.setReversed(DrivetrainSettings.reverseRightFrontMotor);
@@ -46,10 +45,10 @@ public class MecanumDrive {
     public PDFSController strafeController;
     public PDFSController headingController;
 
-    private final Motor leftFront;
-    private final Motor rightFront;
-    private final Motor leftRear;
-    private final Motor rightRear;
+    private final SimpleMotor leftFront;
+    private final SimpleMotor rightFront;
+    private final SimpleMotor leftRear;
+    private final SimpleMotor rightRear;
 
     public void setDriveMode(DriveMode driveMode) {
         this.driveMode = driveMode;

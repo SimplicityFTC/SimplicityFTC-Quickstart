@@ -12,8 +12,8 @@ public class SimpleVoltageSensor {
 
     private SimpleVoltageSensor() { }
 
-    public static double getVoltage(){
-        if(timer.seconds() >= SECONDS_BETWEEN_READS || lastReadVoltage < 0){
+    public static double getVoltage() {
+        if (timer.seconds() >= SECONDS_BETWEEN_READS || lastReadVoltage < 0) {
             timer.reset();
             lastReadVoltage = Hub.CONTROL_HUB.getLynxModule().getInputVoltage(VoltageUnit.VOLTS);
         }
