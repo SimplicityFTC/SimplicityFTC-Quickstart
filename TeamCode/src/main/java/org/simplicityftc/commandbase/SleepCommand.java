@@ -11,6 +11,11 @@ public class SleepCommand extends Command {
     private ElapsedTime timer;
     private final double timeoutSeconds;
 
+    public SleepCommand(String commandName, double timeoutSeconds) {
+        super(commandName);
+        this.timeoutSeconds = timeoutSeconds;
+    }
+
     public SleepCommand(double timeoutSeconds) {
         this.timeoutSeconds = timeoutSeconds;
     }
@@ -22,10 +27,5 @@ public class SleepCommand extends Command {
 
         //TODO: test if this works
         return timer.seconds() >= timeoutSeconds;
-    }
-
-    @Override
-    public void log() {
-
     }
 }

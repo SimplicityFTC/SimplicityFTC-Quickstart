@@ -19,7 +19,22 @@ public class TimedCommand extends Command {
         this.timeoutSeconds = timeoutSeconds;
     }
 
+    public TimedCommand(String commandName, LambdaFunction<?> function, double timeoutSeconds) {
+        super(commandName);
+        this.function = function;
+        this.timeoutSeconds = timeoutSeconds;
+    }
+
     public TimedCommand(Runnable function, double timeoutSeconds) {
+        this.function = () -> {
+            function.run();
+            return null;
+        };
+        this.timeoutSeconds = timeoutSeconds;
+    }
+
+    public TimedCommand(String commandName, Runnable function, double timeoutSeconds) {
+        super(commandName);
         this.function = () -> {
             function.run();
             return null;
@@ -34,10 +49,5 @@ public class TimedCommand extends Command {
 
         //TODO: test if this works
         return timer.seconds() >= timeoutSeconds || function.run().equals(true);
-    }
-
-    @Override
-    public void log() {
-
     }
 }

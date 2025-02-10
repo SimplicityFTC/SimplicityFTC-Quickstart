@@ -1,13 +1,11 @@
 package org.simplicityftc.electronics;
 
-import com.qualcomm.hardware.lynx.LynxDcMotorController;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
-public class Motor{
+public class Motor {
     private final int port;
     private final Hub hub;
 
@@ -73,8 +71,8 @@ public class Motor{
     /**
      * @param amps over current threshold in amps
      */
-     public void setOverCurrentThrehold(double amps) {
-        hub.getMotorController().setMotorCurrentAlert(port, amps, CurrentUnit.AMPS);
+    public void setOverCurrentThreshold(double amps) {
+       hub.getMotorController().setMotorCurrentAlert(port, amps, CurrentUnit.AMPS);
     }
 
     public void update() {

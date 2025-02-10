@@ -1,18 +1,19 @@
 package org.simplicityftc.commandbase;
 
+import org.simplicityftc.logger.LogMessage;
+import org.simplicityftc.logger.Logger;
+
 import java.util.ArrayList;
 
 /**
  * This class schedules and runs multiple types of commands
  */
-public class CommandScheduler
-{
+public class CommandScheduler {
     private static CommandScheduler scheduler;
     private final ArrayList<Command> commands;
     private final ArrayList<Command> removedCommands;
 
-    private CommandScheduler()
-    {
+    private CommandScheduler() {
         this.commands = new ArrayList<>();
         this.removedCommands = new ArrayList<>();
     }
@@ -22,8 +23,7 @@ public class CommandScheduler
      * to access said instance.
      * @return The unique instance of CommandScheduler.
      */
-    public static CommandScheduler getInstance()
-    {
+    public static CommandScheduler getInstance() {
         if (scheduler == null)
             scheduler = new CommandScheduler();
         return scheduler;
@@ -32,8 +32,7 @@ public class CommandScheduler
     /**
      * This function clears the list of active commands, should usually be called in init.
      */
-    public void reset()
-    {
+    public void reset() {
         commands.clear();
     }
 
@@ -41,25 +40,34 @@ public class CommandScheduler
      * This function schedules a command.
      * @param command The desired command to be scheduled.
      */
-    public void schedule(Command command)
-    {
+    public void schedule(Command command) {
         commands.add(command.clone());
+        Logger.getInstance().add(new LogMessage()
+                .setLogType(LogMessage.LogType.COMMAND)
+                .setContent(command.getCommandName().isEmpty() ?
+                        command.getClass().getSimpleName() :
+                        command.getCommandName() + " scheduled")
+        );
     }
 
     /**
      * This function removes an already scheduled command from the scheduler.
      * @param command The desired command to be removed.
      */
-    public void remove(Command command)
-    {
+    public void remove(Command command) {
         commands.remove(command);
+        Logger.getInstance().add(new LogMessage()
+                .setLogType(LogMessage.LogType.COMMAND)
+                .setContent(command.getCommandName().isEmpty() ?
+                        command.getClass().getSimpleName() :
+                        command.getCommandName() + " removed")
+        );
     }
 
     /**
      * This function runs the list of scheduled commands.
      */
-    public void run()
-    {
+    public void run() {
 
         if (commands.isEmpty())
             return;
@@ -70,7 +78,7 @@ public class CommandScheduler
         }
 
         for (Command command : removedCommands)
-            commands.remove(command);
+            remove(command);
         removedCommands.clear();
     }
 }

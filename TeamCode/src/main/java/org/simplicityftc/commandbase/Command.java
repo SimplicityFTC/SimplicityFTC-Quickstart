@@ -2,9 +2,13 @@ package org.simplicityftc.commandbase;
 
 import androidx.annotation.NonNull;
 
-import org.simplicityftc.logger.Loggable;
+public abstract class Command implements Cloneable {
+    private String commandName = "";
+    protected Command(String commandName) {
+        this.commandName = commandName;
+    }
 
-public abstract class Command implements Cloneable, Loggable {
+    protected Command() { }
     /**
      * Runs the command
      * @return true if the command finished, false if it needs to be run again
@@ -24,5 +28,7 @@ public abstract class Command implements Cloneable, Loggable {
         }
     }
 
-    public abstract void log();
+    public String getCommandName() {
+        return commandName;
+    }
 }

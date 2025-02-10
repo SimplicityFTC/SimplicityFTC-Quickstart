@@ -12,14 +12,13 @@ public class ConditionalCommand extends Command {
         this.function = function;
     }
 
+    public ConditionalCommand(String commandName, LambdaFunction<Boolean> function) {
+        super(commandName);
+        this.function = function;
+    }
+
     @Override
     public boolean run() {
         return function.run();
     }
-
-    @Override
-    public void log() {
-
-    }
-
 }

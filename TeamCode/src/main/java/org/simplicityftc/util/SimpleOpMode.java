@@ -1,17 +1,16 @@
 package org.simplicityftc.util;
 
-import com.qualcomm.hardware.lynx.LynxDcMotorController;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.exception.RobotCoreException;
 import com.qualcomm.robotcore.hardware.configuration.LynxConstants;
 
-import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.simplicityftc.commandbase.CommandScheduler;
 import org.simplicityftc.electronics.Hub;
+import org.simplicityftc.logger.Logger;
 
 public abstract class SimpleOpMode extends OpMode {
     public static CommandScheduler commandScheduler;
+    public static Logger logger = Logger.getInstance();
 
     public void initialize() { }
 
@@ -28,9 +27,7 @@ public abstract class SimpleOpMode extends OpMode {
                 Hub.EXPANSION_HUB.setHub(module);
             }
         }
-
         commandScheduler = CommandScheduler.getInstance();
-
         initialize();
     }
 

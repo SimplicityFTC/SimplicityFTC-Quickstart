@@ -17,6 +17,11 @@ public class InstantCommand extends Command {
         this.voidFunction = voidFunction;
     }
 
+    public InstantCommand (String commandName, LambdaFunction<Void> voidFunction) {
+        super(commandName);
+        this.voidFunction = voidFunction;
+    }
+
     public InstantCommand(Runnable voidFunction) {
         this.voidFunction = () -> {
             voidFunction.run();
@@ -28,11 +33,6 @@ public class InstantCommand extends Command {
     public boolean run() {
         voidFunction.run();
         return true;
-    }
-
-    @Override
-    public void log() {
-
     }
 }
 

@@ -1,6 +1,5 @@
 package org.simplicityftc.follower;
 
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -73,18 +72,18 @@ public class MecanumDrive {
         y *= DrivetrainSettings.translationalMaxPower;
         heading *= DrivetrainSettings.rotationalMaxPower;
 
-        if(driveMode == DriveMode.FIELD_CENTRIC) {
+        if (driveMode == DriveMode.FIELD_CENTRIC) {
             double rotated_x = x * Math.cos(localizer.getPose().getHeading()) - y * Math.sin(localizer.getPose().getHeading());
             double rotated_y = x * Math.sin(localizer.getPose().getHeading()) + y * Math.cos(localizer.getPose().getHeading());
             x = rotated_x;
             y = rotated_y;
         }
 
-        if(heading != 0) {
+        if (heading != 0) {
             headingManuallyControlled = true;
             //heading += K_STATIC*Math.signum(heading); //compensate for static friction for more precise control?
-        } else if(DrivetrainSettings.headingLock) {
-            if(headingVelocity < Math.toRadians(10) && headingManuallyControlled) {
+        } else if (DrivetrainSettings.headingLock) {
+            if (headingVelocity < Math.toRadians(10) && headingManuallyControlled) {
                 headingManuallyControlled = false;
                 targetHeading = localizer.getPose().getHeading();
             }
@@ -117,7 +116,7 @@ public class MecanumDrive {
         localizer.update();
         lastPose = localizer.getPose();
 
-        if(driveMode == DriveMode.AUTONOMOUS) {
+        if (driveMode == DriveMode.AUTONOMOUS) {
             Pose targetPose = new Pose();
 
             double fieldCentricXError = targetPose.sub(this.getPosition()).getX();
@@ -144,7 +143,7 @@ public class MecanumDrive {
             double leftRearPower = (forwards_power + strafe_power - headingPower) / denominator;
             double rightRearPower = (forwards_power - strafe_power + headingPower) / denominator;
 
-            if(targetPose.sub(getPosition()).magnitude() > 2) { //TODO: tune this threshold
+            if (targetPose.sub(getPosition()).magnitude() > 2) { //TODO: tune this threshold
                 leftFrontPower = (leftFrontPower + Math.signum(leftFrontPower) * DrivetrainSettings.K_STATIC);
                 rightFrontPower = (rightFrontPower + Math.signum(rightFrontPower) * DrivetrainSettings.K_STATIC);
                 leftRearPower = (leftRearPower + Math.signum(leftRearPower) * DrivetrainSettings.K_STATIC);

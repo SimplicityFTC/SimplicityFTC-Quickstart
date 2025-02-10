@@ -19,9 +19,20 @@ public class SequentialCommand extends Command {
         this.commands = new ArrayList<>(commands);
     }
 
+    public SequentialCommand(String commandName, List<Command> commands)
+    {
+        super(commandName);
+        this.commands = new ArrayList<>(commands);
+    }
+
     public SequentialCommand(Command... commands)
     {
         this(Arrays.asList(commands));
+    }
+
+    public SequentialCommand(String commandName, Command... commands)
+    {
+        this(commandName, Arrays.asList(commands));
     }
 
     @Override
@@ -33,10 +44,5 @@ public class SequentialCommand extends Command {
             commands.remove(0);
 
         return false;
-    }
-
-    @Override
-    public void log() {
-
     }
 }

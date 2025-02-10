@@ -2,7 +2,7 @@ package org.simplicityftc.follower.localizer;
 
 import org.simplicityftc.util.math.Pose;
 
-public class PinpointLocalizer implements Localizer{
+public class PinpointLocalizer implements Localizer {
 
     private Pose lastPose = new Pose();
 

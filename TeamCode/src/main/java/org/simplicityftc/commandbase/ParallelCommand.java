@@ -15,11 +15,20 @@ public class ParallelCommand extends Command {
     private final ArrayList<Command> commands;
     private ArrayList<Command> removedCommands;
 
-    public ParallelCommand (List<Command> commands) {
+    public ParallelCommand(String commandName, List<Command> commands) {
+        super(commandName);
         this.commands = new ArrayList<>(commands);
     }
 
-    public ParallelCommand (Command... commands) {
+    public ParallelCommand(List<Command> commands) {
+        this.commands = new ArrayList<>(commands);
+    }
+
+    public ParallelCommand(String commandName, Command... commands) {
+        this(commandName, Arrays.asList(commands));
+    }
+
+    public ParallelCommand(Command... commands) {
         this(Arrays.asList(commands));
     }
 
@@ -37,10 +46,5 @@ public class ParallelCommand extends Command {
         removedCommands.clear();
 
         return false;
-    }
-
-    @Override
-    public void log() {
-
     }
 }

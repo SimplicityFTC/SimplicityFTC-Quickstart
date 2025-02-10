@@ -12,14 +12,14 @@ public class WaitUntilCommand extends Command {
         this.booleanFunction = booleanFunction;
     }
 
-    @Override
-    public boolean run() {
-        return booleanFunction.run();
+    public WaitUntilCommand (String commandName, LambdaFunction<Boolean> booleanFunction) {
+        super(commandName);
+        this.booleanFunction = booleanFunction;
     }
 
     @Override
-    public void log() {
-
+    public boolean run() {
+        return booleanFunction.run();
     }
 }
 
