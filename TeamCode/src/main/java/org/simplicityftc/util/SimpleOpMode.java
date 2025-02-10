@@ -9,6 +9,7 @@ import org.simplicityftc.commandbase.CommandScheduler;
 import org.simplicityftc.electronics.Hub;
 import org.simplicityftc.electronics.SimpleVoltageSensor;
 import org.simplicityftc.logger.Logger;
+import org.simplicityftc.electronics.SimpleGamepad;
 
 public abstract class SimpleOpMode extends LinearOpMode {
     public static CommandScheduler commandScheduler = CommandScheduler.getInstance();
@@ -17,12 +18,12 @@ public abstract class SimpleOpMode extends LinearOpMode {
     private static final ElapsedTime runtime = new ElapsedTime();
     private int loopCount = 0;
 
+    public volatile SimpleGamepad gamepad1 = new SimpleGamepad();
+    public volatile SimpleGamepad gamepad2 = new SimpleGamepad();
+
     public abstract void onInit();
-
-    public abstract void initialize_loop();
-
-    public abstract void onStart();
-
+    public void initialize_loop() {}
+    public void onStart() {}
     public abstract void run();
 
     @Override
@@ -52,7 +53,7 @@ public abstract class SimpleOpMode extends LinearOpMode {
             Hub.CONTROL_HUB.readData();
             Hub.EXPANSION_HUB.readData();
 
-            if (voltageLogTimer.seconds() > 0.25) {
+            if (voltageLogTimer.seconds() >= 0.5) {
                 logger.add(Logger.LogType.VOLTAGE, "Current voltage is: " + SimpleVoltageSensor.getVoltage() + " V");
                 voltageLogTimer.reset();
             }

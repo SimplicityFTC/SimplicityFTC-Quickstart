@@ -1,11 +1,13 @@
 package org.simplicityftc.follower;
 
+import com.acmerobotics.dashboard.config.Config;
+
 import org.simplicityftc.controlsystem.PDFSConstants;
 import org.simplicityftc.electronics.Hub;
 import org.simplicityftc.follower.localizer.Localizer;
 import org.simplicityftc.follower.localizer.PinpointLocalizer;
 
-//@Config
+@Config
 public class DrivetrainSettings {
     public static final Hub DRIVETRAIN_MOTORS_SIMPLE_HUB = Hub.CONTROL_HUB;
     public static final int leftFrontMotorPort = 0;
