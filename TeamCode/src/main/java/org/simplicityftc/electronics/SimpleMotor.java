@@ -7,6 +7,8 @@ import com.qualcomm.hardware.lynx.commands.core.LynxSetMotorConstantPowerCommand
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.simplicityftc.util.math.SimpleMath;
+
 public class SimpleMotor {
     private final int port;
     private final Hub hub;
@@ -35,7 +37,7 @@ public class SimpleMotor {
      * @param power value in range (-1, 1)
      */
     public void setPower(double power) {
-        power = Math.min(Math.max(power, -1), 1);
+        power = SimpleMath.clamp(power, -1, 1);
 
         if (Math.abs(power - lastPower) < powerSetTolerance && power != 1 && power != -1 && power != 0) {
             return;

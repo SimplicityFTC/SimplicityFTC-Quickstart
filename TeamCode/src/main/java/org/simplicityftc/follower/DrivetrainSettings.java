@@ -9,7 +9,7 @@ import org.simplicityftc.follower.localizer.PinpointLocalizer;
 
 @Config
 public class DrivetrainSettings {
-    public static final Hub DRIVETRAIN_MOTORS_SIMPLE_HUB = Hub.CONTROL_HUB;
+    public static final Hub DRIVETRAIN_MOTORS_HUB = Hub.CONTROL_HUB;
     public static final int leftFrontMotorPort = 0;
     public static final int rightFrontMotorPort = 1;
     public static final int leftRearMotorPort = 2;
@@ -20,7 +20,7 @@ public class DrivetrainSettings {
     public static final boolean reverseLeftRearMotor = false;
     public static final boolean reverseRightRearMotor = true;
 
-    public static final Hub ODOMETRY_ENCODERS_SIMPLE_HUB = Hub.CONTROL_HUB;
+    public static final Hub ODOMETRY_ENCODERS_HUB = Hub.CONTROL_HUB;
     private static final int leftParallelEncoderPort = 0;
     private static final int perpendicularEncoderPort = 1;
     private static final int rightParallelEncoderPort = 2;
