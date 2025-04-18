@@ -45,6 +45,14 @@ public class CommandScheduler {
     }
 
     /**
+     * This function removes a command from the list of scheduled commands.
+     * @param commandName The name of the command to be removed.
+     */
+    public void remove(String commandName) {
+        commands = commands.stream().filter(c -> !c.getCommandName().equals(commandName)).collect(Collectors.toList());
+    }
+
+    /**
      * This function writes a schedule log.
      * @param command The scheduled command.
      */
