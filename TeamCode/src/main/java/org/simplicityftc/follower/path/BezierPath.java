@@ -1,6 +1,7 @@
 package org.simplicityftc.follower.path;
 
 import org.simplicityftc.util.math.Pose;
+import org.simplicityftc.util.math.SimpleMath;
 
 public class BezierPath implements Path{
     private final Pose startPose;
@@ -22,7 +23,9 @@ public class BezierPath implements Path{
         }
     }
 
-    private Pose get(double t) {
+    private Pose get(double displacement) {
+        displacement = SimpleMath.clamp(displacement, 0, length);
+        double t = displacement / length;
         return endPose.scale(t * t * t).add(
                 controlPoint2.scale(3.0 * (1.0 - t) * t * t)).add(
                 controlPoint1.scale(3.0 * (1.0 - t) * (1.0 - t) * t)).add(
@@ -45,16 +48,13 @@ public class BezierPath implements Path{
     }
 
     private double getDx(double t) {
-        double dx = (3 * endPose.getX() * t * t) + (6 * controlPoint2.getX() * t - 9 * controlPoint2.getX() * t * t) + (3 * controlPoint1.getX() - 6 * controlPoint1.getX() * t - 9 * controlPoint1.getX() * t * t);
-        return dx;
+        return (3 * endPose.getX() * t * t) + (6 * controlPoint2.getX() * t - 9 * controlPoint2.getX() * t * t) + (3 * controlPoint1.getX() - 6 * controlPoint1.getX() * t - 9 * controlPoint1.getX() * t * t);
     }
 
     private double getDy(double t) {
-        double dy = (3 * endPose.getY() * t * t) + (6 * controlPoint2.getY() * t - 9 * controlPoint2.getY() * t * t) + (3 * controlPoint1.getY() - 6 * controlPoint1.getY() * t - 9 * controlPoint1.getY() * t * t);
-        return dy;
+        return (3 * endPose.getY() * t * t) + (6 * controlPoint2.getY() * t - 9 * controlPoint2.getY() * t * t) + (3 * controlPoint1.getY() - 6 * controlPoint1.getY() * t - 9 * controlPoint1.getY() * t * t);
     }
     private double getDxx(double t) {
-        double dxx = (6 * endPose.getX() * t) + (6 * controlPoint2.getX() - 18 * controlPoint2.getX() * t) + (-6 * controlPoint1.getX());
-        return dxx;
+        return (6 * endPose.getX() * t) + (6 * controlPoint2.getX() - 18 * controlPoint2.getX() * t) + (-6 * controlPoint1.getX());
     }
 }

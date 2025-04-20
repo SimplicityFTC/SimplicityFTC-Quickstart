@@ -8,6 +8,7 @@ import org.simplicityftc.controlsystem.PDFSController;
 import org.simplicityftc.follower.localizer.Localizer;
 import org.simplicityftc.electronics.SimpleVoltageSensor;
 import org.simplicityftc.util.math.Pose;
+import org.simplicityftc.util.math.SimpleMath;
 
 public class MecanumDrive {
     public enum DriveMode {
@@ -26,10 +27,10 @@ public class MecanumDrive {
     private double targetHeading = 0;
 
     public MecanumDrive() {
-        leftFront = new SimpleMotor(DrivetrainSettings.DRIVETRAIN_MOTORS_SIMPLE_HUB, DrivetrainSettings.leftFrontMotorPort);
-        rightFront = new SimpleMotor(DrivetrainSettings.DRIVETRAIN_MOTORS_SIMPLE_HUB, DrivetrainSettings.rightFrontMotorPort);
-        leftRear = new SimpleMotor(DrivetrainSettings.DRIVETRAIN_MOTORS_SIMPLE_HUB, DrivetrainSettings.leftRearMotorPort);
-        rightRear = new SimpleMotor(DrivetrainSettings.DRIVETRAIN_MOTORS_SIMPLE_HUB, DrivetrainSettings.rightRearMotorPort);
+        leftFront = new SimpleMotor(DrivetrainSettings.DRIVETRAIN_MOTORS_HUB, DrivetrainSettings.leftFrontMotorPort);
+        rightFront = new SimpleMotor(DrivetrainSettings.DRIVETRAIN_MOTORS_HUB, DrivetrainSettings.rightFrontMotorPort);
+        leftRear = new SimpleMotor(DrivetrainSettings.DRIVETRAIN_MOTORS_HUB, DrivetrainSettings.leftRearMotorPort);
+        rightRear = new SimpleMotor(DrivetrainSettings.DRIVETRAIN_MOTORS_HUB, DrivetrainSettings.rightRearMotorPort);
 
         leftFront.setReversed(DrivetrainSettings.reverseLeftFrontMotor);
         rightFront.setReversed(DrivetrainSettings.reverseRightFrontMotor);
@@ -52,6 +53,17 @@ public class MecanumDrive {
 
     public void setDriveMode(DriveMode driveMode) {
         this.driveMode = driveMode;
+        if (driveMode != DriveMode.AUTONOMOUS && DrivetrainSettings.coastInTeleop) {
+            leftFront.setCoasting(true);
+            rightFront.setCoasting(true);
+            leftRear.setCoasting(true);
+            rightRear.setCoasting(true);
+        } else {
+            leftFront.setCoasting(false);
+            rightFront.setCoasting(false);
+            leftRear.setCoasting(false);
+            rightRear.setCoasting(false);
+        }
     }
 
     public Pose getPosition() {
@@ -67,13 +79,19 @@ public class MecanumDrive {
     }
 
     public void drive(double x, double y, double heading) {
+        x = SimpleMath.clamp(x, -1, 1);
+        y = SimpleMath.clamp(y, -1, 1);
+        heading = SimpleMath.clamp(heading, -1, 1);
+
         x *= DrivetrainSettings.translationalMaxPower;
         y *= DrivetrainSettings.translationalMaxPower;
         heading *= DrivetrainSettings.rotationalMaxPower;
 
         if (driveMode == DriveMode.FIELD_CENTRIC) {
-            double rotated_x = x * Math.cos(localizer.getPose().getHeading()) - y * Math.sin(localizer.getPose().getHeading());
-            double rotated_y = x * Math.sin(localizer.getPose().getHeading()) + y * Math.cos(localizer.getPose().getHeading());
+            double rotated_x = x * Math.cos(localizer.getPose().getHeading())
+                             - y * Math.sin(localizer.getPose().getHeading());
+            double rotated_y = x * Math.sin(localizer.getPose().getHeading())
+                             + y * Math.cos(localizer.getPose().getHeading());
             x = rotated_x;
             y = rotated_y;
         }
@@ -97,7 +115,11 @@ public class MecanumDrive {
         rightRear.setPower((x - y + heading) / denominator);
     }
 
-    public void setMotorPowers(double leftFront, double rightFront, double leftRear, double rightRear) {
+    public void setMotorPowers(
+                            double leftFront,
+                            double rightFront,
+                            double leftRear,
+                            double rightRear) {
         this.leftFront.setPower(leftFront);
         this.rightFront.setPower(rightFront);
         this.leftRear.setPower(leftRear);
@@ -133,7 +155,7 @@ public class MecanumDrive {
 
             double forwards_power = forwardController.calculate(-robotCentricForwardError);
             double strafe_power = strafeController.calculate(-robotCentricStrafeError);
-            double headingPower = headingController.calculate(headingTarget + AngleUnit.normalizeRadians(headingTarget - getPosition().getHeading()));
+            double headingPower = headingController.calculate(headingTarget + SimpleMath.normalizeRadians(headingTarget - getPosition().getHeading()));
 
             double denominator = Math.max(Math.abs(forwards_power) + Math.abs(strafe_power) + Math.abs(headingPower), 1);
 
