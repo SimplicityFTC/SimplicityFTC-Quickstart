@@ -1,10 +1,14 @@
 package org.simplicityftc.util;
 
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.hardware.lynx.commands.core.LynxFirmwareVersionManager;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
+import com.qualcomm.robotcore.hardware.I2cDeviceSynchSimple;
 import com.qualcomm.robotcore.hardware.configuration.LynxConstants;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.simplicityftc.commandbase.CommandScheduler;
 import org.simplicityftc.electronics.Hub;
 import org.simplicityftc.electronics.SimpleVoltageSensor;
@@ -26,6 +30,14 @@ public abstract class SimpleOpMode extends LinearOpMode {
     public void onStart() {}
     public abstract void run();
 
+    public I2cDeviceSynchSimple getI2cDevice(Hub hub, int bus, int address) {
+        return LynxFirmwareVersionManager.createLynxI2cDeviceSynch(
+                AppUtil.getDefContext(),
+                hub.getLynxModule(),
+                bus
+        );
+    }
+
     @Override
     public void runOpMode() throws InterruptedException {
         for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
@@ -36,7 +48,6 @@ public abstract class SimpleOpMode extends LinearOpMode {
             }
         }
         commandScheduler.reset();
-
         onInit();
         while (!isStarted() && !isStopRequested()) {
             initialize_loop();

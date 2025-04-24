@@ -10,7 +10,7 @@ import org.simplicityftc.electronics.Hub;
 import org.simplicityftc.util.math.Pose;
 
 public class PinpointLocalizer implements Localizer {
-    private final static int port = 0;
+    private final static int bus = 0;
 
     private final static double xOffset = -84;
     private final static double yOffset = -168;
@@ -20,12 +20,12 @@ public class PinpointLocalizer implements Localizer {
     private final GoBildaPinpointDriver pinpoint;
 
     public PinpointLocalizer() {
-        if (port < 0 || port > 3) throw new IllegalArgumentException("Port must be between 0 and 3");
+        if (bus < 0 || bus > 3) throw new IllegalArgumentException("Port must be between 0 and 3");
         pinpoint = new GoBildaPinpointDriver(
                LynxFirmwareVersionManager.createLynxI2cDeviceSynch(
                        AppUtil.getDefContext(),
                        Hub.CONTROL_HUB.getLynxModule(),
-                       port
+                       bus
                ),
                true
         );
