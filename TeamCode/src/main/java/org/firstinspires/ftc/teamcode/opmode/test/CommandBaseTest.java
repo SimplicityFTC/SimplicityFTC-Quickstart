@@ -5,7 +5,6 @@ import org.simplicityftc.commandbase.SequentialCommand;
 import org.simplicityftc.commandbase.SleepCommand;
 import org.simplicityftc.commandbase.TimedCommand;
 import org.simplicityftc.commandbase.WaitUntilCommand;
-import org.simplicityftc.electronics.SimpleVoltageSensor;
 import org.simplicityftc.logger.Logger;
 import org.simplicityftc.util.SimpleOpMode;
 

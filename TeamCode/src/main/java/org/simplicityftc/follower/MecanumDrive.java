@@ -2,11 +2,10 @@ package org.simplicityftc.follower;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.simplicityftc.electronics.SimpleMotor;
 import org.simplicityftc.controlsystem.PDFSController;
-import org.simplicityftc.follower.localizer.Localizer;
+import org.simplicityftc.electronics.SimpleMotor;
 import org.simplicityftc.electronics.SimpleVoltageSensor;
+import org.simplicityftc.follower.localizer.Localizer;
 import org.simplicityftc.util.math.Pose;
 import org.simplicityftc.util.math.SimpleMath;
 

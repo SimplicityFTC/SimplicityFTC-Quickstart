@@ -7,6 +7,7 @@ import com.qualcomm.hardware.lynx.commands.core.LynxSetMotorConstantPowerCommand
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.simplicityftc.logger.Logger;
 import org.simplicityftc.util.math.SimpleMath;
 
 public class SimpleMotor {
@@ -122,6 +123,8 @@ public class SimpleMotor {
                     (int)(lastPower * 32767)
             ).send();
         }
-        catch (InterruptedException | RuntimeException | LynxNackException ignored) { }
+        catch (InterruptedException | RuntimeException | LynxNackException exception) {
+            Logger.getInstance().add(Logger.LogType.ERROR, exception.getMessage());
+        }
     }
 }

@@ -4,6 +4,8 @@ import com.qualcomm.hardware.lynx.LynxNackException;
 import com.qualcomm.hardware.lynx.commands.core.LynxSetServoPulseWidthCommand;
 import com.qualcomm.robotcore.util.Range;
 
+import org.simplicityftc.logger.Logger;
+
 
 public class SimpleCRServo {
     private final int port;
@@ -65,6 +67,8 @@ public class SimpleCRServo {
                     pwm
             ).send();
         }
-        catch (InterruptedException | RuntimeException | LynxNackException ignored) { }
+        catch (InterruptedException | RuntimeException | LynxNackException exception) {
+            Logger.getInstance().add(Logger.LogType.ERROR, exception.getMessage());
+        }
     }
 }

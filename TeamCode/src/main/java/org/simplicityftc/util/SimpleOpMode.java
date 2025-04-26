@@ -3,7 +3,6 @@ package org.simplicityftc.util;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.lynx.commands.core.LynxFirmwareVersionManager;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynchSimple;
 import com.qualcomm.robotcore.hardware.configuration.LynxConstants;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -11,9 +10,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.simplicityftc.commandbase.CommandScheduler;
 import org.simplicityftc.electronics.Hub;
+import org.simplicityftc.electronics.SimpleGamepad;
 import org.simplicityftc.electronics.SimpleVoltageSensor;
 import org.simplicityftc.logger.Logger;
-import org.simplicityftc.electronics.SimpleGamepad;
 
 public abstract class SimpleOpMode extends LinearOpMode {
     public static CommandScheduler commandScheduler = CommandScheduler.getInstance();
@@ -40,14 +39,27 @@ public abstract class SimpleOpMode extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+
         for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
             if(module.isParent() && LynxConstants.isEmbeddedSerialNumber(module.getSerialNumber())) {
                 Hub.CONTROL_HUB.setHub(module);
             } else {
-                Hub.EXPANSION_HUB.setHub(module);
+                if(module.getDeviceName().contains("Servo Hub")){
+                    for(Hub hub : Hub.values()){
+                        if (hub.canId == 0) continue;
+                        if(module.getDeviceName().endsWith("" + hub.canId)){
+                            hub.setHub(module);
+                            break;
+                        }
+                    }
+                } else {
+                    Hub.EXPANSION_HUB.setHub(module);
+                }
             }
         }
+
         commandScheduler.reset();
+
         onInit();
         while (!isStarted() && !isStopRequested()) {
             initialize_loop();
