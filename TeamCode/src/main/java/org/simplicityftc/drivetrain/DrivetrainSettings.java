@@ -1,11 +1,12 @@
-package org.simplicityftc.follower;
+package org.simplicityftc.drivetrain;
 
 import com.acmerobotics.dashboard.config.Config;
 
 import org.simplicityftc.controlsystem.PDFSConstants;
+import org.simplicityftc.drivetrain.follower.Drivetrain;
 import org.simplicityftc.electronics.Hub;
-import org.simplicityftc.follower.localizer.Localizer;
-import org.simplicityftc.follower.localizer.PinpointLocalizer;
+import org.simplicityftc.drivetrain.localizer.Localizer;
+import org.simplicityftc.drivetrain.localizer.PinpointLocalizer;
 
 @Config
 public class DrivetrainSettings {
@@ -25,15 +26,16 @@ public class DrivetrainSettings {
     private static final int perpendicularEncoderPort = 1;
     private static final int rightParallelEncoderPort = 2;
 
-    public static final MecanumDrive.DriveMode driveMode = MecanumDrive.DriveMode.ROBOT_CENTRIC;
+    public static final Drivetrain.DriveMode driveMode = Drivetrain.DriveMode.ROBOT_CENTRIC;
     public static final boolean headingLock = false;
 
     public static final boolean coastInTeleop = false;
 
     public static final Localizer localizer = new PinpointLocalizer();
 
-    public static PDFSConstants xConstants = new PDFSConstants(0, 0, 0, 0);
-    public static PDFSConstants yConstants = new PDFSConstants(0, 0, 0, 0);
+    public static double followerTolerance = 2.5;//cm before atTarget() returns true
+    public static PDFSConstants forwardConstants = new PDFSConstants(0, 0, 0, 0);
+    public static PDFSConstants strafeConstants = new PDFSConstants(0, 0, 0, 0);
     public static PDFSConstants headingConstants = new PDFSConstants(0, 0, 0, 0);
     public static double K_STATIC = 0;
 

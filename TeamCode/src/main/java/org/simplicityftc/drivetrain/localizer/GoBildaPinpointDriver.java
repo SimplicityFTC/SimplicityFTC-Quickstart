@@ -20,7 +20,7 @@
  *   SOFTWARE.
  */
 
-package org.simplicityftc.follower.localizer;
+package org.simplicityftc.drivetrain.localizer;
 
 import static com.qualcomm.robotcore.util.TypeConversion.byteArrayToInt;
 

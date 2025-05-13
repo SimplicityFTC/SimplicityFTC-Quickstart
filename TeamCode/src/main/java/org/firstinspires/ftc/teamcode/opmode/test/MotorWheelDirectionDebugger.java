@@ -3,7 +3,8 @@ package org.firstinspires.ftc.teamcode.opmode.test;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.simplicityftc.follower.MecanumDrive;
+import org.simplicityftc.drivetrain.MecanumDrive;
+import org.simplicityftc.drivetrain.follower.Drivetrain;
 
 /**
 
@@ -22,12 +23,12 @@ import org.simplicityftc.follower.MecanumDrive;
  */
 
 public class MotorWheelDirectionDebugger extends OpMode {
-    MecanumDrive mecanumDrive;
+    Drivetrain drivetrain = new MecanumDrive(); //Change to preferred drivetrain
     ElapsedTime timer;
     @Override
     public void init() {
-        mecanumDrive = new MecanumDrive();
-        mecanumDrive.setDriveMode(MecanumDrive.DriveMode.ROBOT_CENTRIC);
+        drivetrain = new MecanumDrive();
+        drivetrain.setDriveMode(Drivetrain.DriveMode.ROBOT_CENTRIC);
         timer = new ElapsedTime();
     }
 
@@ -37,13 +38,13 @@ public class MotorWheelDirectionDebugger extends OpMode {
             timer.reset();
         }
 
-        mecanumDrive.setMotorPowers(
+        drivetrain.setMotorPowers( //fix
                 (timer.seconds() <= 1) ? 0.7 : 0,
                 (Math.abs(timer.seconds() -2.5) <= 0.5) ? 0.7 : 0,
                 (Math.abs(timer.seconds() - 4.5) <= 0.5) ? 0.7 : 0,
                 (Math.abs(timer.seconds() - 6.5) <= 0.5) ? 0.7 : 0
         );
 
-        mecanumDrive.update();
+        drivetrain.update();
     }
 }

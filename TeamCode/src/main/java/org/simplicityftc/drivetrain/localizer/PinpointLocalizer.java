@@ -1,7 +1,7 @@
-package org.simplicityftc.follower.localizer;
+package org.simplicityftc.drivetrain.localizer;
 
-import static org.simplicityftc.follower.localizer.GoBildaPinpointDriver.EncoderDirection.FORWARD;
-import static org.simplicityftc.follower.localizer.GoBildaPinpointDriver.EncoderDirection.REVERSED;
+import static org.simplicityftc.drivetrain.localizer.GoBildaPinpointDriver.EncoderDirection.FORWARD;
+import static org.simplicityftc.drivetrain.localizer.GoBildaPinpointDriver.EncoderDirection.REVERSED;
 
 import com.qualcomm.hardware.lynx.commands.core.LynxFirmwareVersionManager;
 

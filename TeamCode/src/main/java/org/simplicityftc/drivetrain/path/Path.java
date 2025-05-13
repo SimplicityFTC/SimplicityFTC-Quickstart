@@ -1,4 +1,4 @@
-package org.simplicityftc.follower.path;
+package org.simplicityftc.drivetrain.path;
 
 import org.simplicityftc.util.math.Pose;
 

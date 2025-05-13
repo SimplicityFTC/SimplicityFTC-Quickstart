@@ -4,13 +4,15 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.simplicityftc.follower.MecanumDrive;
+import org.simplicityftc.drivetrain.DrivetrainSettings;
+import org.simplicityftc.drivetrain.MecanumDrive;
+import org.simplicityftc.drivetrain.follower.Drivetrain;
 import org.simplicityftc.util.math.Pose;
 
 @Autonomous(group = "Automatic Tuners")
 public class DrivetrainStaticFeedforwardTuner extends OpMode {
 
-    private MecanumDrive mecanumDrive;
+    private Drivetrain drivetrain;
     private double lastSetPower = 0;
     private double iterationsLeft = 10;
     private double kStatic = 0;
@@ -19,7 +21,7 @@ public class DrivetrainStaticFeedforwardTuner extends OpMode {
 
     @Override
     public void init() {
-        mecanumDrive = new MecanumDrive();
+        drivetrain = new MecanumDrive();
 
         timer = new ElapsedTime();
 
@@ -31,7 +33,7 @@ public class DrivetrainStaticFeedforwardTuner extends OpMode {
 
     @Override
     public void loop() {
-        if(!mecanumDrive.getVelocity().equals(new Pose()) && iterationsLeft != 0) {
+        if(!DrivetrainSettings.localizer.getVelocity().equals(new Pose()) && iterationsLeft != 0) {
             kStatic += lastSetPower;
 
             iterationsLeft -= 1;
@@ -46,14 +48,14 @@ public class DrivetrainStaticFeedforwardTuner extends OpMode {
         lastSetPower += timer.seconds() * kStaticIncrementPerSecond;
 
         if(iterationsLeft != 0) {
-            mecanumDrive.setMotorPowers( lastSetPower * Math.signum((iterationsLeft + 1) % 2 - 0.5),
+            drivetrain.setMotorPowers( lastSetPower * Math.signum((iterationsLeft + 1) % 2 - 0.5),
                                         lastSetPower * Math.signum((iterationsLeft + 1) % 2 - 0.5),
                                          lastSetPower * Math.signum((iterationsLeft + 1) % 2 - 0.5),
                                         lastSetPower * Math.signum((iterationsLeft + 1) % 2 - 0.5));
         } else {
-            mecanumDrive.setMotorPowers(0, 0, 0, 0);
+            drivetrain.setMotorPowers(0, 0, 0, 0);
         }
 
-        mecanumDrive.update();
+        drivetrain.update();
     }
 }

@@ -58,8 +58,9 @@ public class PDFSController {
         return calculate(currentPosition);
     }
 
+    // WARNING: Do not pass in the error as the current position as that can cause
+    //          issues with the dampening maths
     public double calculate(double currentPosition) {
-
         double error = target - currentPosition;
         double currentVelocity = (lastPosition - currentPosition) / timer.seconds();
         lastPosition = currentPosition;

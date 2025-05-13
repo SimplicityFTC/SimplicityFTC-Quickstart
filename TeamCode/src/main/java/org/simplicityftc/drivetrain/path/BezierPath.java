@@ -1,4 +1,4 @@
-package org.simplicityftc.follower.path;
+package org.simplicityftc.drivetrain.path;
 
 import org.simplicityftc.util.math.Pose;
 import org.simplicityftc.util.math.SimpleMath;
@@ -54,6 +54,7 @@ public class BezierPath implements Path{
     private double getDy(double t) {
         return (3 * endPose.getY() * t * t) + (6 * controlPoint2.getY() * t - 9 * controlPoint2.getY() * t * t) + (3 * controlPoint1.getY() - 6 * controlPoint1.getY() * t - 9 * controlPoint1.getY() * t * t);
     }
+
     private double getDxx(double t) {
         return (6 * endPose.getX() * t) + (6 * controlPoint2.getX() - 18 * controlPoint2.getX() * t) + (-6 * controlPoint1.getX());
     }
