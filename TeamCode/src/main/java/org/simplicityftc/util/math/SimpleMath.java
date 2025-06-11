@@ -1,22 +1,13 @@
 package org.simplicityftc.util.math;
 
 public final class SimpleMath{
+    //normalization using the formula found in goBilda's pinpoint driver code
     public static double normalizeRadians(double radians) {
-        radians = (radians + Math.PI) % (Math.PI * 2);
-        if (radians < 0) {
-            radians += Math.PI;
-        }
-        radians -= Math.PI;
-        return radians;
+        return ((radians + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI;
     }
 
     public static double normalizeDegrees(double degrees) {
-        degrees = (degrees + 180) % 360;
-        if (degrees < 0) {
-            degrees += 360;
-        }
-        degrees -= 180;
-        return degrees;
+        return ((degrees + 180) % (2 * 180) + 2 * 180) % (2 * 180) - 180;
     }
 
     public static double clamp(double value, double min, double max) {
