@@ -61,7 +61,9 @@ public class SimpleMotor {
                     DcMotor.RunMode.RUN_WITHOUT_ENCODER,
                     coasting ? DcMotor.ZeroPowerBehavior.FLOAT : DcMotor.ZeroPowerBehavior.BRAKE
             ).send();
-        } catch (InterruptedException | LynxNackException ignored) { }
+        } catch (InterruptedException | LynxNackException exception) {
+            Logger.getInstance().add(Logger.LogType.ERROR, exception.getMessage());
+        }
     }
 
     /**
@@ -103,7 +105,9 @@ public class SimpleMotor {
                     port,
                     (int)(amps * 1000.0)
             ).send();
-        } catch (InterruptedException | LynxNackException ignored) { }
+        } catch (InterruptedException | LynxNackException exception) {
+            Logger.getInstance().add(Logger.LogType.ERROR, exception.getMessage());
+        }
     }
 
     public void update() {
@@ -123,7 +127,7 @@ public class SimpleMotor {
                     (int)(lastPower * 32767)
             ).send();
         }
-        catch (InterruptedException | RuntimeException | LynxNackException exception) {
+        catch (InterruptedException | LynxNackException exception) {
             Logger.getInstance().add(Logger.LogType.ERROR, exception.getMessage());
         }
     }

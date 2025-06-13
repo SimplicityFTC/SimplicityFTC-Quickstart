@@ -67,7 +67,7 @@ public class SimpleCRServo {
                     pwm
             ).send();
         }
-        catch (InterruptedException | RuntimeException | LynxNackException exception) {
+        catch (InterruptedException | LynxNackException exception) {
             Logger.getInstance().add(Logger.LogType.ERROR, exception.getMessage());
         }
     }
