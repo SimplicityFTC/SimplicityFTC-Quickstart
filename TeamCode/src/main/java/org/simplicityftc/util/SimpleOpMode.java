@@ -46,7 +46,7 @@ public abstract class SimpleOpMode extends LinearOpMode {
             } else {
                 if(module.getDeviceName().contains("Servo Hub")){
                     for(Hub hub : Hub.values()){
-                        if (hub.canId == 0) continue;
+                        if (hub.canId == 0 || hub.getLynxModule() != null) continue;
                         if(module.getDeviceName().endsWith("" + hub.canId)){
                             hub.setHub(module);
                             break;
