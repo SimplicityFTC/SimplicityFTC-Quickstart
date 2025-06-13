@@ -33,24 +33,34 @@ public class PDFSController {
         this(constants.getkP(), constants.getkD(), constants.getmin_kF(), constants.getmax_kF(), constants.getkS());
     }
 
-    public void setConstants(double kP, double kD, double min_kF, double max_kF, double kStatic) {
+    public PDFSController setConstants(double kP, double kD, double min_kF, double max_kF, double kStatic) {
         this.kP = kP;
         this.kD = kD;
         this.min_kF = min_kF;
         this.max_kF = max_kF;
         this.kStatic = kStatic;
+        return this;
     }
 
-    public void setConstants(double kP, double kD, double kF, double kStatic) {
+    public PDFSController setConstants(double kP, double kD, double kF, double kStatic) {
         setConstants(kP, kD, kF, kF, kStatic);
+        return this;
     }
 
-    public void setConstants(PDFSConstants constants) {
+    public PDFSController setConstants(PDFSConstants constants) {
         setConstants(constants.getkP(), constants.getkD(), constants.getmin_kF(), constants.getmax_kF(), constants.getkS());
+        return this;
     }
 
-    public void setTarget(double target) {
+    public PDFSController setLimits(double minPosition, double maxPosition) {
+        this.minPosition = minPosition;
+        this.maxPosition = maxPosition;
+        return this;
+    }
+
+    public PDFSController setTarget(double target) {
         this.target = target;
+        return this;
     }
 
     public double calculate(double currentPosition, double targetPosition) {
@@ -88,7 +98,8 @@ public class PDFSController {
 
      */
 
-    private void setFeedforwardMultiplier(double multiplier){
+    private PDFSController setFeedforwardMultiplier(double multiplier){
         feedforwardMultiplier = SimpleMath.clamp(multiplier, 0, 1);
+        return this;
     }
 }

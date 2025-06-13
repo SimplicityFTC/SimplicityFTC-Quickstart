@@ -10,6 +10,7 @@ public interface Drivetrain {
     }
     void setMotorPowers(double leftFront, double rightFront, double leftRear, double rightRear);
     void setDriveMode(Drivetrain.DriveMode driveMode);
+    Follower getFollower();
     void drive(double forwards, double strafe, double turn);
     void update();
 }

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmode.test;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -22,6 +23,7 @@ import org.simplicityftc.drivetrain.follower.Drivetrain;
  while waiting for 1 second between setting the power
  */
 
+@Autonomous(group = "Default Tuners")
 public class MotorWheelDirectionDebugger extends OpMode {
     Drivetrain drivetrain = new MecanumDrive(); //Change to preferred drivetrain
     ElapsedTime timer;

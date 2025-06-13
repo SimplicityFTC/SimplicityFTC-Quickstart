@@ -31,13 +31,15 @@ public class PidToPointFollower implements Follower {
     };
 
     @Override
-    public void add(Pose... points) {
+    public Follower add(Pose... points) {
         Arrays.stream(points).sequential().forEach(PidToPointFollower.points::add);
+        return this;
     }
 
     @Override
-    public void clear() {
+    public Follower clear() {
         points.clear();
+        return this;
     }
 
     public boolean atTarget() {

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmode.test;
 
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 import org.simplicityftc.commandbase.InstantCommand;
 import org.simplicityftc.commandbase.SequentialCommand;
 import org.simplicityftc.commandbase.SleepCommand;
@@ -8,6 +10,7 @@ import org.simplicityftc.commandbase.WaitUntilCommand;
 import org.simplicityftc.logger.Logger;
 import org.simplicityftc.util.SimpleOpMode;
 
+@TeleOp(group = "Debug")
 public class CommandBaseTest extends SimpleOpMode {
     TimedCommand timedCommand = new TimedCommand(() -> System.out.printf("sigma"), 10);
 

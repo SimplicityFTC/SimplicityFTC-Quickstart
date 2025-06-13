@@ -108,6 +108,10 @@ public class MecanumDrive implements Drivetrain {
         rightRear.setPower((x - y + heading) / denominator);
     }
 
+    public Follower getFollower() {
+        return follower;
+    }
+
     public void setMotorPowers(
                             double leftFront,
                             double rightFront,

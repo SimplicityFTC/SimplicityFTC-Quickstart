@@ -9,7 +9,7 @@ import org.simplicityftc.drivetrain.MecanumDrive;
 import org.simplicityftc.drivetrain.follower.Drivetrain;
 import org.simplicityftc.util.math.Pose;
 
-@Autonomous(group = "Automatic Tuners")
+@Autonomous(group = "Tuners")
 public class DrivetrainStaticFeedforwardTuner extends OpMode {
 
     private Drivetrain drivetrain;
@@ -54,6 +54,9 @@ public class DrivetrainStaticFeedforwardTuner extends OpMode {
                                         lastSetPower * Math.signum((iterationsLeft + 1) % 2 - 0.5));
         } else {
             drivetrain.setMotorPowers(0, 0, 0, 0);
+            try {
+                wait(1000); //ik, ew
+            } catch (InterruptedException ignored) { }
         }
 
         drivetrain.update();
