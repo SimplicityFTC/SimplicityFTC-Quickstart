@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.simplicityftc.drivetrain.MecanumDrive;
 import org.simplicityftc.drivetrain.follower.Drivetrain;
+import org.simplicityftc.util.SimpleOpMode;
 
 /**
 
@@ -24,18 +25,18 @@ import org.simplicityftc.drivetrain.follower.Drivetrain;
  */
 
 @Autonomous(group = "Default Tuners")
-public class MotorWheelDirectionDebugger extends OpMode {
-    Drivetrain drivetrain = new MecanumDrive(); //Change to preferred drivetrain
+public class MotorWheelDirectionDebugger extends SimpleOpMode {
+    Drivetrain drivetrain; //Change to preferred drivetrain
     ElapsedTime timer;
     @Override
-    public void init() {
+    public void onInit() {
         drivetrain = new MecanumDrive();
         drivetrain.setDriveMode(Drivetrain.DriveMode.ROBOT_CENTRIC);
         timer = new ElapsedTime();
     }
 
     @Override
-    public void loop() {
+    public void run() {
         if(timer.seconds() >= 8) {
             timer.reset();
         }

@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.opmode.test;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.simplicityftc.drivetrain.DrivetrainSettings;
 import org.simplicityftc.drivetrain.MecanumDrive;
 import org.simplicityftc.drivetrain.follower.Drivetrain;
 import org.simplicityftc.util.math.Pose;
@@ -18,7 +17,7 @@ public class LocalizationTest extends OpMode {
     @Override
     public void init() {
         drivetrain = new MecanumDrive();
-        DrivetrainSettings.localizer.setPose(startPose);
+        drivetrain.localizer.setPose(startPose);
     }
 
     @Override
@@ -33,9 +32,9 @@ public class LocalizationTest extends OpMode {
                 rotate + Math.signum(rotate)*0.15
         );
 
-        telemetry.addData("x (cm)", DrivetrainSettings.localizer.getPose().getX());
-        telemetry.addData("y (cm)", DrivetrainSettings.localizer.getPose().getY());
-        telemetry.addData("heading (deg)", Math.toDegrees(DrivetrainSettings.localizer.getPose().getHeading()));
+        telemetry.addData("x (cm)", drivetrain.localizer.getPose().getX());
+        telemetry.addData("y (cm)", drivetrain.localizer.getPose().getY());
+        telemetry.addData("heading (deg)", Math.toDegrees(drivetrain.localizer.getPose().getHeading()));
 
         telemetry.update();
         drivetrain.update();

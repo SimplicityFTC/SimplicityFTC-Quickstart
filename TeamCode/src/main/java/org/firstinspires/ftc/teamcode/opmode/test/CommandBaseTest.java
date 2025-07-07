@@ -12,7 +12,7 @@ import org.simplicityftc.util.SimpleOpMode;
 
 @TeleOp(group = "Debug")
 public class CommandBaseTest extends SimpleOpMode {
-    TimedCommand timedCommand = new TimedCommand(() -> System.out.printf("sigma"), 10);
+    TimedCommand timedCommand = new TimedCommand(() -> System.out.println("sigma"), 10);
 
     @Override
     public void onInit(){ }
@@ -22,8 +22,8 @@ public class CommandBaseTest extends SimpleOpMode {
 
     @Override
     public void onStart(){
-        commandScheduler.schedule(new SequentialCommand(
-                new TimedCommand(() -> System.out.printf("whatever"), 10),
+        commandScheduler.schedule(new SequentialCommand( "CommandBaseTest Sequential Command",
+                new TimedCommand(() -> System.out.println("whatever"), 10),
                 new WaitUntilCommand(() -> getRuntime() > 25),
                 timedCommand,
                 new InstantCommand(() -> Logger.getInstance().add(Logger.LogType.INFO, "Skibidi Toilet or Creeper?")),

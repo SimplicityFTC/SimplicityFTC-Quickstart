@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.simplicityftc.drivetrain.DrivetrainSettings;
 import org.simplicityftc.drivetrain.MecanumDrive;
 import org.simplicityftc.drivetrain.follower.Drivetrain;
 import org.simplicityftc.util.math.Pose;
@@ -33,7 +32,7 @@ public class DrivetrainStaticFeedforwardTuner extends OpMode {
 
     @Override
     public void loop() {
-        if(!DrivetrainSettings.localizer.getVelocity().equals(new Pose()) && iterationsLeft != 0) {
+        if(!drivetrain.localizer.getVelocity().equals(new Pose()) && iterationsLeft != 0) {
             kStatic += lastSetPower;
 
             iterationsLeft -= 1;

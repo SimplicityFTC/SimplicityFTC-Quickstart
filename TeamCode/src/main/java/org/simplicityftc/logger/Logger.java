@@ -95,15 +95,17 @@ public class Logger {
             logFile.createNewFile();
         } catch (IOException ignored) { }
 
+        System.out.println(message);
+
         try {
             if (fileWriter == null) {
                 fileWriter = new FileWriter(logFile, true);
             }
-            fileWriter.write(
+            /*fileWriter.write(
                     logType.toString() + " "
                         + SDF.format(new Date(System.currentTimeMillis())) + " "
                         + message + "\n"
-            );
+            );*/
             fileWriter.close();
         } catch (IOException ignored) { }
     }

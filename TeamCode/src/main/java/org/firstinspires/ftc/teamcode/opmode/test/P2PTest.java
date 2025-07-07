@@ -6,7 +6,6 @@ import org.simplicityftc.commandbase.InstantCommand;
 import org.simplicityftc.commandbase.SequentialCommand;
 import org.simplicityftc.commandbase.SleepCommand;
 import org.simplicityftc.commandbase.WaitUntilCommand;
-import org.simplicityftc.drivetrain.DrivetrainSettings;
 import org.simplicityftc.drivetrain.MecanumDrive;
 import org.simplicityftc.drivetrain.follower.Drivetrain;
 import org.simplicityftc.drivetrain.follower.Follower;
@@ -24,7 +23,7 @@ public class P2PTest extends SimpleOpMode {
         drivetrain = new MecanumDrive();
         follower = drivetrain.getFollower();
 
-        DrivetrainSettings.localizer.setPose(new Pose()); //wtf is this why is it static
+        drivetrain.localizer.setPose(new Pose()); //wtf is this why is it static
         //something's wrong, wtf did i do?? TODO: move drivetrain settings to the drivetrain class itself
         //am i skibid?? brainrot is consuming me ahhlkjdfgl;kjdsf;gjdlfk
         //am i skibid?? brainrot is consuming me ahhlkjdfgl;kjdsf;gjdlfk
