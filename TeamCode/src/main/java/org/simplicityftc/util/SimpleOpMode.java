@@ -3,6 +3,7 @@ package org.simplicityftc.util;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.lynx.commands.core.LynxFirmwareVersionManager;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynchSimple;
 import com.qualcomm.robotcore.hardware.configuration.LynxConstants;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -10,7 +11,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.simplicityftc.commandbase.CommandScheduler;
 import org.simplicityftc.electronics.Hub;
-import org.simplicityftc.electronics.SimpleGamepad;
 import org.simplicityftc.electronics.SimpleVoltageSensor;
 import org.simplicityftc.logger.Logger;
 
@@ -19,10 +19,8 @@ public abstract class SimpleOpMode extends LinearOpMode {
     public static Logger logger = Logger.getInstance();
     private static final ElapsedTime voltageLogTimer = new ElapsedTime();
     private static final ElapsedTime runtime = new ElapsedTime();
+    public static final ElapsedTime deltaTime = new ElapsedTime();
     private int loopCount = 0;
-
-    public volatile SimpleGamepad gamepad1 = new SimpleGamepad();
-    public volatile SimpleGamepad gamepad2 = new SimpleGamepad();
 
     public abstract void onInit();
     public void initialize_loop() {}
@@ -30,21 +28,25 @@ public abstract class SimpleOpMode extends LinearOpMode {
     public abstract void run();
 
     public I2cDeviceSynchSimple getI2cDevice(Hub hub, int bus, int address) {
-        return LynxFirmwareVersionManager.createLynxI2cDeviceSynch(
+        I2cDeviceSynchSimple i2cDevice = LynxFirmwareVersionManager.createLynxI2cDeviceSynch(
                 AppUtil.getDefContext(),
                 hub.getLynxModule(),
-                bus
-        );
+                bus);
+        i2cDevice.setI2cAddress(I2cAddr.create7bit(address));
+        return i2cDevice;
     }
 
     @Override
     public void runOpMode() throws InterruptedException {
+        Logger.getInstance().add(Logger.LogType.DEBUG,String.format("number of lynx modules: %n", hardwareMap.getAll(LynxModule.class).size()));
 
         for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
-            if(module.isParent() && LynxConstants.isEmbeddedSerialNumber(module.getSerialNumber())) {
+            if(module.isParent() && LynxConstants.isEmbeddedSerialNumber(module.getSerialNumber()) && Hub.CONTROL_HUB.getLynxModule() == null) {
                 Hub.CONTROL_HUB.setHub(module);
             } else {
                 if(module.getDeviceName().contains("Servo Hub")){
+                    Logger.getInstance().add(Logger.LogType.DEBUG, "skibidee");
+                    Logger.getInstance().add(Logger.LogType.DEBUG, module.getDeviceName());
                     for(Hub hub : Hub.values()){
                         if (hub.canId == 0 || hub.getLynxModule() != null) continue;
                         if(module.getDeviceName().endsWith("" + hub.canId)){
@@ -52,8 +54,10 @@ public abstract class SimpleOpMode extends LinearOpMode {
                             break;
                         }
                     }
-                } else {
-                    Hub.EXPANSION_HUB.setHub(module);
+                } else if (Hub.EXPANSION_HUB.getLynxModule() == null) {
+                    {
+                        Hub.EXPANSION_HUB.setHub(module);
+                    }
                 }
             }
         }
@@ -70,11 +74,15 @@ public abstract class SimpleOpMode extends LinearOpMode {
         voltageLogTimer.reset();
         runtime.reset();
         onStart();
+        deltaTime.reset();
         while (opModeIsActive() && !isStopRequested()) {
-            run();
-            commandScheduler.run();
             Hub.CONTROL_HUB.readData();
-            Hub.EXPANSION_HUB.readData();
+            if (Hub.EXPANSION_HUB.getLynxModule() != null) {
+                Hub.EXPANSION_HUB.readData();
+            }
+            run();
+            deltaTime.reset();
+            commandScheduler.run();
 
             if (voltageLogTimer.seconds() >= 0.5) {
                 logger.add(Logger.LogType.VOLTAGE, "Current voltage is: " + SimpleVoltageSensor.getVoltage() + " V");

@@ -10,7 +10,7 @@ import org.simplicityftc.logger.Logger;
 public enum Hub {
     CONTROL_HUB(),
     EXPANSION_HUB(),
-    SERVO_HUB1(1),
+    SERVO_HUB1(5),
     SERVO_HUB2(),
     SERVO_HUB3(),
     SERVO_HUB4();
