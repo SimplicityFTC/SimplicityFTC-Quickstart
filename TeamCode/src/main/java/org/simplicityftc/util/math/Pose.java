@@ -2,10 +2,11 @@ package org.simplicityftc.util.math;
 
 import androidx.annotation.NonNull;
 
-public class Pose {
-    private double x;
-    private double y;
-    private double heading;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+
+public class Pose extends Pose2D {
 
     /**
      * @param x x coordinate of position vector
@@ -13,9 +14,7 @@ public class Pose {
      * @param heading rotation of position vector
      */
     public Pose(double x, double y, double heading) {
-        this.x = x;
-        this.y = y;
-        this.heading = heading;
+        super(DistanceUnit.CM, x, y, AngleUnit.RADIANS, heading);
     }
 
     /**
@@ -82,13 +81,6 @@ public class Pose {
     }
 
     /**
-     * @param heading rotation in radians
-     */
-    public void setHeading(double heading) {
-        this.heading = heading;
-    }
-
-    /**
      * @return pose y coordinate in cm
      */
     public double getY() {
@@ -96,23 +88,9 @@ public class Pose {
     }
 
     /**
-     * @param y coordinate in cm
-     */
-    public void setY(double y) {
-        this.y = y;
-    }
-
-    /**
      * @return pose x coordinate in cm
      */
     public double getX() {
         return x;
-    }
-
-    /**
-     * @param x coordinate in cm
-     */
-    public void setX(double x) {
-        this.x = x;
     }
 }

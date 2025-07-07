@@ -1,10 +1,13 @@
 package org.simplicityftc.drivetrain.localizer;
 
-import static org.simplicityftc.drivetrain.localizer.GoBildaPinpointDriver.EncoderDirection.FORWARD;
-import static org.simplicityftc.drivetrain.localizer.GoBildaPinpointDriver.EncoderDirection.REVERSED;
 
+import static com.qualcomm.hardware.gobilda.GoBildaPinpointDriver.EncoderDirection.FORWARD;
+import static com.qualcomm.hardware.gobilda.GoBildaPinpointDriver.EncoderDirection.REVERSED;
+
+import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.lynx.commands.core.LynxFirmwareVersionManager;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.simplicityftc.electronics.Hub;
 import org.simplicityftc.util.math.Pose;
@@ -29,7 +32,7 @@ public class PinpointLocalizer implements Localizer {
                ),
                true
         );
-        pinpoint.setOffsets(xOffset, yOffset);
+        pinpoint.setOffsets(xOffset, yOffset, DistanceUnit.CM);
         pinpoint.setEncoderDirections(
                 (forwardEncoderReversed ? REVERSED : FORWARD),
                 (strafeEncoderReversed ? REVERSED : FORWARD)
@@ -40,12 +43,13 @@ public class PinpointLocalizer implements Localizer {
 
     @Override
     public Pose getPose() {
-        return pinpoint.getPosition();
+        return (Pose)pinpoint.getPosition();
     }
 
     @Override
     public Pose getVelocity() {
-        return pinpoint.getVelocity();
+        //should we use heading velocity? nah i'm sigma
+        return new Pose(pinpoint.getVelX(DistanceUnit.CM), pinpoint.getVelY(DistanceUnit.CM), 0);
     }
 
     @Override
