@@ -1,21 +1,40 @@
 package org.simplicityftc.drivetrain;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.simplicityftc.controlsystem.PDFSConstants;
 import org.simplicityftc.controlsystem.PDFSController;
 import org.simplicityftc.drivetrain.follower.Drivetrain;
 import org.simplicityftc.drivetrain.follower.Follower;
 import org.simplicityftc.drivetrain.follower.PidToPointFollower;
+import org.simplicityftc.drivetrain.localizer.PinpointLocalizer;
+import org.simplicityftc.electronics.Hub;
 import org.simplicityftc.electronics.SimpleMotor;
 import org.simplicityftc.electronics.SimpleVoltageSensor;
 import org.simplicityftc.drivetrain.localizer.Localizer;
 import org.simplicityftc.util.math.Pose;
 import org.simplicityftc.util.math.SimpleMath;
 
-public class MecanumDrive implements Drivetrain {
-    private Drivetrain.DriveMode driveMode = DrivetrainSettings.driveMode;
-    private final Localizer localizer = DrivetrainSettings.localizer;
-    private final Follower follower = new PidToPointFollower();
+@Config
+public class MecanumDrive extends Drivetrain {
+    
+    public static final Hub DRIVETRAIN_MOTORS_HUB = Hub.CONTROL_HUB;
+
+    public static Drivetrain.DriveMode driveMode = Drivetrain.DriveMode.ROBOT_CENTRIC;
+    public static boolean headingLock = false;
+
+    public static boolean coastInTeleop = false;
+
+    public static double followerTolerance = 2.5;//cm before atTarget() returns true
+
+    public static double K_STATIC = 0;
+
+    public static double translationalMaxPower = 1;
+    public static double rotationalMaxPower = 1;
+
+    public final Localizer localizer;
+    public final Follower follower;
 
     private boolean headingManuallyControlled = false;
     private final ElapsedTime headingTimer = new ElapsedTime();
@@ -24,17 +43,24 @@ public class MecanumDrive implements Drivetrain {
     private double targetHeading = 0;
 
     public MecanumDrive() {
-        leftFront = new SimpleMotor(DrivetrainSettings.DRIVETRAIN_MOTORS_HUB, DrivetrainSettings.leftFrontMotorPort);
-        rightFront = new SimpleMotor(DrivetrainSettings.DRIVETRAIN_MOTORS_HUB, DrivetrainSettings.rightFrontMotorPort);
-        leftRear = new SimpleMotor(DrivetrainSettings.DRIVETRAIN_MOTORS_HUB, DrivetrainSettings.leftRearMotorPort);
-        rightRear = new SimpleMotor(DrivetrainSettings.DRIVETRAIN_MOTORS_HUB, DrivetrainSettings.rightRearMotorPort);
+        forwardConstants = new PDFSConstants(0, 0, 0, 0);
+        strafeConstants = new PDFSConstants(0, 0, 0, 0);
+        headingConstants = new PDFSConstants(0, 0, 0, 0);
 
-        leftFront.setReversed(DrivetrainSettings.reverseLeftFrontMotor);
-        rightFront.setReversed(DrivetrainSettings.reverseRightFrontMotor);
-        leftRear.setReversed(DrivetrainSettings.reverseLeftRearMotor);
-        rightRear.setReversed(DrivetrainSettings.reverseRightRearMotor);
+        localizer = new PinpointLocalizer();
+        follower = new PidToPointFollower(this);
 
-        headingController = new PDFSController(DrivetrainSettings.headingConstants);
+        leftFront = new SimpleMotor(DRIVETRAIN_MOTORS_HUB, 0);
+        rightFront = new SimpleMotor(DRIVETRAIN_MOTORS_HUB, 1);
+        leftRear = new SimpleMotor(DRIVETRAIN_MOTORS_HUB, 2);
+        rightRear = new SimpleMotor(DRIVETRAIN_MOTORS_HUB, 3);
+
+        leftFront.setReversed(false);
+        rightFront.setReversed(true);
+        leftRear.setReversed(false);
+        rightRear.setReversed(true);
+
+        headingController = new PDFSController(headingConstants);
     }
 
     public PDFSController headingController;
@@ -46,7 +72,7 @@ public class MecanumDrive implements Drivetrain {
 
     public void setDriveMode(Drivetrain.DriveMode driveMode) {
         this.driveMode = driveMode;
-        if (driveMode != Drivetrain.DriveMode.AUTONOMOUS && DrivetrainSettings.coastInTeleop) {
+        if (driveMode != Drivetrain.DriveMode.AUTONOMOUS && coastInTeleop) {
             leftFront.setCoasting(true);
             rightFront.setCoasting(true);
             leftRear.setCoasting(true);
@@ -76,9 +102,9 @@ public class MecanumDrive implements Drivetrain {
         y = SimpleMath.clamp(y, -1, 1);
         heading = SimpleMath.clamp(heading, -1, 1);
 
-        x *= DrivetrainSettings.translationalMaxPower;
-        y *= DrivetrainSettings.translationalMaxPower;
-        heading *= DrivetrainSettings.rotationalMaxPower;
+        x *= translationalMaxPower;
+        y *= translationalMaxPower;
+        heading *= rotationalMaxPower;
 
         if (driveMode == Drivetrain.DriveMode.FIELD_CENTRIC) {
             double rotated_x = x * Math.cos(localizer.getPose().getHeading())
@@ -92,7 +118,7 @@ public class MecanumDrive implements Drivetrain {
         if (heading != 0) {
             headingManuallyControlled = true;
             //heading += K_STATIC*Math.signum(heading); //compensate for static friction for more precise control?
-        } else if (DrivetrainSettings.headingLock) {
+        } else if (headingLock) {
             if (headingVelocity < Math.toRadians(10) && headingManuallyControlled) {
                 headingManuallyControlled = false;
                 targetHeading = localizer.getPose().getHeading();
@@ -124,7 +150,7 @@ public class MecanumDrive implements Drivetrain {
     }
 
     public void update() {
-        headingController.setConstants(DrivetrainSettings.headingConstants);
+        headingController.setConstants(headingConstants);
 
         headingVelocity = (lastPose.getHeading() - localizer.getPose().getHeading()) / headingTimer.seconds();
         headingTimer.reset();
