@@ -1,6 +1,8 @@
-package org.simplicityftc.electronics;
+package org.simplicityftc.devices;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
+
+import org.simplicityftc.util.SimpleOpMode;
 
 import java.nio.ByteBuffer;
 
@@ -42,11 +44,15 @@ public class SimpleGamepad extends Gamepad {
         }
     }
 
+    public SimpleGamepad() {
+        SimpleOpMode.deviceUpdateMethods.add(this::update);
+    }
+
     public boolean wasJustPressed(Button button) {
         return (~lastButtons & currentButtons & button.integer) != 0;
     }
 
-    public void update() {
+    private void update() {
         byte[] newData = toByteArray();
         ByteBuffer byteBuffer = getReadBuffer(newData);
         id = byteBuffer.getInt();

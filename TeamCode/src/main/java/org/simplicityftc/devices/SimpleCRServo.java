@@ -1,10 +1,11 @@
-package org.simplicityftc.electronics;
+package org.simplicityftc.devices;
 
 import com.qualcomm.hardware.lynx.LynxNackException;
 import com.qualcomm.hardware.lynx.commands.core.LynxSetServoPulseWidthCommand;
 import com.qualcomm.robotcore.util.Range;
 
 import org.simplicityftc.logger.Logger;
+import org.simplicityftc.util.SimpleOpMode;
 
 
 public class SimpleCRServo {
@@ -12,7 +13,7 @@ public class SimpleCRServo {
     private final Hub hub;
 
     private double lastPower = 0;
-    private final double powerSetTolerance = 0.03;
+    private double powerSetTolerance = 0.03;
 
     private int lowerPWM = 500;
     private int upperPWM = 2500;
@@ -23,6 +24,7 @@ public class SimpleCRServo {
         if(port < 0 || port > 5) throw new IllegalArgumentException("Port must be between 0 and 5");
         this.hub = hub;
         this.port = port;
+        SimpleOpMode.deviceUpdateMethods.add(this::update);
     }
 
     /**
@@ -48,11 +50,23 @@ public class SimpleCRServo {
         shouldUpdate = true;
     }
 
+    /**
+     * Returns the cached servo power.
+     * @return The cached servo power.
+     */
     public double getPower() {
         return lastPower;
     }
 
-    public void update() {
+    /**
+     * This method allows you to set the threshold for CRServo write calls.
+     * @param newTolerance The desired tolerance to make write calls.
+     */
+    public void setPowerTolerance(double newTolerance) {
+        powerSetTolerance = newTolerance;
+    }
+
+    private void update() {
 
         if(!shouldUpdate) {
             return;

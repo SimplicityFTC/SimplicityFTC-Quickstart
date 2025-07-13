@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.IMU;
 
-import org.simplicityftc.electronics.Hub;
+import org.simplicityftc.devices.Hub;
 import org.simplicityftc.util.SimpleOpMode;
 
 @TeleOp(group = "Debug")

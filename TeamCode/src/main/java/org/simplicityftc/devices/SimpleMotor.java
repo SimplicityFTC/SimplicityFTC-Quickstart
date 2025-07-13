@@ -1,4 +1,4 @@
-package org.simplicityftc.electronics;
+package org.simplicityftc.devices;
 
 import com.qualcomm.hardware.lynx.LynxNackException;
 import com.qualcomm.hardware.lynx.commands.core.LynxSetMotorChannelCurrentAlertLevelCommand;
@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.simplicityftc.logger.Logger;
+import org.simplicityftc.util.SimpleOpMode;
 import org.simplicityftc.util.math.SimpleMath;
 
 public class SimpleMotor {
@@ -28,6 +29,7 @@ public class SimpleMotor {
         if (port < 0 || port > 3) throw new IllegalArgumentException("Port must be between 0 and 3");
         this.hub = hub;
         this.port = port;
+        SimpleOpMode.deviceUpdateMethods.add(this::update);
     }
 
     public void setReversed(boolean reversed) {
@@ -110,7 +112,7 @@ public class SimpleMotor {
         }
     }
 
-    public void update() {
+    private void update() {
         double newPosition = getPosition();
         lastVelocity = (newPosition - lastPosition) / timer.seconds();
         timer.reset();

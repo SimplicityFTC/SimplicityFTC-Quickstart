@@ -4,8 +4,8 @@ import com.qualcomm.hardware.lynx.commands.core.LynxGetServoConfigurationCommand
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.simplicityftc.electronics.Hub;
-import org.simplicityftc.electronics.SimpleServo;
+import org.simplicityftc.devices.Hub;
+import org.simplicityftc.devices.SimpleServo;
 import org.simplicityftc.util.SimpleOpMode;
 
 @TeleOp(group = "Tuners")

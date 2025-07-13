@@ -1,4 +1,4 @@
-package org.simplicityftc.electronics;
+package org.simplicityftc.devices;
 
 public class SimpleDigitalInput {
     private final int pin;

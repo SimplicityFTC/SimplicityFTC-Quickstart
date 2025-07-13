@@ -19,6 +19,7 @@ public class Logger {
     private File logFile = null;
     private FileWriter fileWriter = null;
     private static final SimpleDateFormat SDF = new SimpleDateFormat("HH:mm:ss", Locale.US);
+    private boolean isEnabled = false;
 
     /**
      * This enum is used to specify the type of log message.
@@ -70,6 +71,16 @@ public class Logger {
     }
 
     /**
+     * This method sets the isEnabled state of the logger for writing in a separate file.
+     * The default state is false. This state does not affect the System.out logs, they
+     * will always be enabled.
+     * @param enable The desired state of the logger.
+     */
+    public void enableFileLogging(boolean enable) {
+        isEnabled = enable;
+    }
+
+    /**
      * This method sets the name of the log file.
      * You do not need to add an extension.
      * In case of any extension, it will be removed and replaced with .txt.
@@ -87,6 +98,11 @@ public class Logger {
      * @param message The message to add to the log file.
      */
     public void add(LogType logType, String message) {
+        System.out.println(message);
+        if (!isEnabled) {
+            return;
+        }
+
         if (logFile == null) {
             logFile = new File("log.txt");
         }
@@ -95,17 +111,17 @@ public class Logger {
             logFile.createNewFile();
         } catch (IOException ignored) { }
 
-        System.out.println(message);
+
 
         try {
             if (fileWriter == null) {
                 fileWriter = new FileWriter(logFile, true);
             }
-            /*fileWriter.write(
+            fileWriter.write(
                     logType.toString() + " "
                         + SDF.format(new Date(System.currentTimeMillis())) + " "
                         + message + "\n"
-            );*/
+            );
             fileWriter.close();
         } catch (IOException ignored) { }
     }

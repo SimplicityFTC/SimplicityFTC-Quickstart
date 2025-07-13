@@ -10,9 +10,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.simplicityftc.commandbase.CommandScheduler;
-import org.simplicityftc.electronics.Hub;
-import org.simplicityftc.electronics.SimpleVoltageSensor;
+import org.simplicityftc.devices.Hub;
+import org.simplicityftc.devices.SimpleVoltageSensor;
 import org.simplicityftc.logger.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class SimpleOpMode extends LinearOpMode {
     public static CommandScheduler commandScheduler = CommandScheduler.getInstance();
@@ -20,6 +23,7 @@ public abstract class SimpleOpMode extends LinearOpMode {
     private static final ElapsedTime voltageLogTimer = new ElapsedTime();
     private static final ElapsedTime runtime = new ElapsedTime();
     public static final ElapsedTime deltaTime = new ElapsedTime();
+    public static final List<Runnable> deviceUpdateMethods = new ArrayList<>();
     private int loopCount = 0;
 
     public abstract void onInit();
@@ -80,6 +84,7 @@ public abstract class SimpleOpMode extends LinearOpMode {
             if (Hub.EXPANSION_HUB.getLynxModule() != null) {
                 Hub.EXPANSION_HUB.readData();
             }
+            deviceUpdateMethods.forEach(Runnable::run);
             run();
             deltaTime.reset();
             commandScheduler.run();

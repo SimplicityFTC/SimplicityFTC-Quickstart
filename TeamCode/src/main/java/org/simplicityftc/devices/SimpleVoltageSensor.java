@@ -1,4 +1,4 @@
-package org.simplicityftc.electronics;
+package org.simplicityftc.devices;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 

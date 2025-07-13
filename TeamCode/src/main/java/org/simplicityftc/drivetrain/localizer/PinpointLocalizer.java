@@ -9,7 +9,7 @@ import com.qualcomm.hardware.lynx.commands.core.LynxFirmwareVersionManager;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
-import org.simplicityftc.electronics.Hub;
+import org.simplicityftc.devices.Hub;
 import org.simplicityftc.util.math.Pose;
 
 public class PinpointLocalizer implements Localizer {

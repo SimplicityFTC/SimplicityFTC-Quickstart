@@ -16,6 +16,7 @@ public abstract class Drivetrain {
     public static PDFSConstants headingConstants;
     public Localizer localizer;
     public Follower follower;
+    public DriveMode driveMode;
     abstract public void setMotorPowers(double leftFront, double rightFront, double leftRear, double rightRear);
     abstract public void setDriveMode(Drivetrain.DriveMode driveMode);
     abstract public Follower getFollower();

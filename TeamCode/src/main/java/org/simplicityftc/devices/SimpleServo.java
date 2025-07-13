@@ -1,4 +1,4 @@
-package org.simplicityftc.electronics;
+package org.simplicityftc.devices;
 
 import com.qualcomm.hardware.lynx.LynxNackException;
 import com.qualcomm.hardware.lynx.commands.core.LynxGetServoEnableCommand;
@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.util.Range;
 
 import org.simplicityftc.logger.Logger;
+import org.simplicityftc.util.SimpleOpMode;
 import org.simplicityftc.util.math.SimpleMath;
 
 
@@ -28,6 +29,8 @@ public class SimpleServo {
         if(port < 0 || port > 5) throw new IllegalArgumentException("Port must be between 0 and 5");
         this.hub = hub;
         this.port = port;
+
+        SimpleOpMode.deviceUpdateMethods.add(this::update);
 
         try {
             new LynxSetServoConfigurationCommand(hub.getLynxModule(), port, (int)new PwmControl.PwmRange(500, 2500).usFrame);
@@ -70,7 +73,7 @@ public class SimpleServo {
         this.positionSetTolerance = tolerance;
     }
 
-    public void update() {
+    private void update() {
         if (!shouldUpdate) {
             return;
         }

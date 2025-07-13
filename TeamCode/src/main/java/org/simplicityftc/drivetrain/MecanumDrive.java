@@ -9,32 +9,25 @@ import org.simplicityftc.drivetrain.follower.Drivetrain;
 import org.simplicityftc.drivetrain.follower.Follower;
 import org.simplicityftc.drivetrain.follower.PidToPointFollower;
 import org.simplicityftc.drivetrain.localizer.PinpointLocalizer;
-import org.simplicityftc.electronics.Hub;
-import org.simplicityftc.electronics.SimpleMotor;
-import org.simplicityftc.electronics.SimpleVoltageSensor;
-import org.simplicityftc.drivetrain.localizer.Localizer;
+import org.simplicityftc.devices.Hub;
+import org.simplicityftc.devices.SimpleMotor;
+import org.simplicityftc.devices.SimpleVoltageSensor;
 import org.simplicityftc.util.math.Pose;
 import org.simplicityftc.util.math.SimpleMath;
 
 @Config
 public class MecanumDrive extends Drivetrain {
-    
     public static final Hub DRIVETRAIN_MOTORS_HUB = Hub.CONTROL_HUB;
 
-    public static Drivetrain.DriveMode driveMode = Drivetrain.DriveMode.ROBOT_CENTRIC;
+
     public static boolean headingLock = false;
 
     public static boolean coastInTeleop = false;
-
-    public static double followerTolerance = 2.5;//cm before atTarget() returns true
 
     public static double K_STATIC = 0;
 
     public static double translationalMaxPower = 1;
     public static double rotationalMaxPower = 1;
-
-    public final Localizer localizer;
-    public final Follower follower;
 
     private boolean headingManuallyControlled = false;
     private final ElapsedTime headingTimer = new ElapsedTime();
@@ -42,13 +35,23 @@ public class MecanumDrive extends Drivetrain {
     private Pose lastPose = new Pose();
     private double targetHeading = 0;
 
+    public PDFSController headingController;
+
+    private final SimpleMotor leftFront;
+    private final SimpleMotor rightFront;
+    private final SimpleMotor leftRear;
+    private final SimpleMotor rightRear;
+
     public MecanumDrive() {
+        driveMode = Drivetrain.DriveMode.ROBOT_CENTRIC;
+
         forwardConstants = new PDFSConstants(0, 0, 0, 0);
         strafeConstants = new PDFSConstants(0, 0, 0, 0);
         headingConstants = new PDFSConstants(0, 0, 0, 0);
 
         localizer = new PinpointLocalizer();
         follower = new PidToPointFollower(this);
+        followerTolerance = 2.5; //distance in cm before atTarget() returns true
 
         leftFront = new SimpleMotor(DRIVETRAIN_MOTORS_HUB, 0);
         rightFront = new SimpleMotor(DRIVETRAIN_MOTORS_HUB, 1);
@@ -62,13 +65,6 @@ public class MecanumDrive extends Drivetrain {
 
         headingController = new PDFSController(headingConstants);
     }
-
-    public PDFSController headingController;
-
-    private final SimpleMotor leftFront;
-    private final SimpleMotor rightFront;
-    private final SimpleMotor leftRear;
-    private final SimpleMotor rightRear;
 
     public void setDriveMode(Drivetrain.DriveMode driveMode) {
         this.driveMode = driveMode;
