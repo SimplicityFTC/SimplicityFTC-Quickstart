@@ -18,8 +18,6 @@ import org.simplicityftc.util.math.SimpleMath;
 @Config
 public class MecanumDrive extends Drivetrain {
     public static final Hub DRIVETRAIN_MOTORS_HUB = Hub.CONTROL_HUB;
-
-
     public static boolean headingLock = false;
 
     public static boolean coastInTeleop = false;
@@ -158,10 +156,5 @@ public class MecanumDrive extends Drivetrain {
             Pose followVector = follower.getFollowVector().scale(12 / SimpleVoltageSensor.getVoltage());
             drive(followVector.getX(), followVector.getY(), followVector.getHeading());
         }
-
-        leftFront.update();
-        rightFront.update();
-        leftRear.update();
-        rightRear.update();
     }
 }

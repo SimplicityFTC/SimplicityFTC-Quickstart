@@ -26,17 +26,17 @@ public class SimpleServo {
     private boolean shouldUpdate = true;
 
     public SimpleServo(Hub hub, int port) {
-        if(port < 0 || port > 5) throw new IllegalArgumentException("Port must be between 0 and 5");
+        if (port < 0 || port > 5) throw new IllegalArgumentException("Port must be between 0 and 5");
         this.hub = hub;
         this.port = port;
 
         SimpleOpMode.deviceUpdateMethods.add(this::update);
 
         try {
-            new LynxSetServoConfigurationCommand(hub.getLynxModule(), port, (int)new PwmControl.PwmRange(500, 2500).usFrame);
-            while(!new LynxGetServoEnableCommand(hub.getLynxModule(), port).sendReceive().isEnabled()) {
+            new LynxSetServoConfigurationCommand(hub.getLynxModule(), port, (int)new PwmControl.PwmRange(500, 2500).usFrame).send();
+            //while(!new LynxGetServoEnableCommand(hub.getLynxModule(), port).sendReceive().isEnabled()) {
                 new LynxSetServoEnableCommand(hub.getLynxModule(), port, true).send();
-            }
+            //}
         } catch (InterruptedException | LynxNackException exception) {
             Logger.getInstance().add(Logger.LogType.ERROR, exception.getMessage());
         }
@@ -49,6 +49,12 @@ public class SimpleServo {
     public void setPWMRange(int lowerPWM, int upperPWM) {
         this.lowerPWM = lowerPWM;
         this.upperPWM = upperPWM;
+
+        try {
+            new LynxSetServoConfigurationCommand(hub.getLynxModule(), port, (int) new PwmControl.PwmRange(lowerPWM, upperPWM).usFrame).send();
+        } catch (InterruptedException | LynxNackException exception) {
+            Logger.getInstance().add(Logger.LogType.ERROR, exception.getMessage());
+        }
     }
 
     /**
@@ -57,7 +63,7 @@ public class SimpleServo {
     public void setPosition(double position) {
         position = Math.min(Math.max(position, 0.0), 1.0);
 
-        if(Math.abs(position - lastPosition) < positionSetTolerance)
+        if (Math.abs(position - lastPosition) < positionSetTolerance)
             return;
 
         lastPosition = position;
@@ -79,10 +85,9 @@ public class SimpleServo {
         }
 
         int pwm = (int)Range.scale(lastPosition, 0.0, 1.0, lowerPWM, upperPWM);
-
         try {
-            while(!new LynxGetServoEnableCommand(hub.getLynxModule(), port).sendReceive().isEnabled())
-                new LynxSetServoEnableCommand(hub.getLynxModule(), port, true).send();
+//            while(!new LynxGetServoEnableCommand(hub.getLynxModule(), port).sendReceive().isEnabled())
+//                new LynxSetServoEnableCommand(hub.getLynxModule(), port, true).send();
             new LynxSetServoPulseWidthCommand(
                     hub.getLynxModule(),
                     port,

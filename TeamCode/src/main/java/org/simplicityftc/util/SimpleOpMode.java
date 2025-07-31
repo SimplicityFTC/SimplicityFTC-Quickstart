@@ -43,7 +43,7 @@ public abstract class SimpleOpMode extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         Logger.getInstance().add(Logger.LogType.DEBUG,String.format("number of lynx modules: %n", hardwareMap.getAll(LynxModule.class).size()));
-
+        deviceUpdateMethods.clear();
         for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
             if(module.isParent() && LynxConstants.isEmbeddedSerialNumber(module.getSerialNumber()) && Hub.CONTROL_HUB.getLynxModule() == null) {
                 Hub.CONTROL_HUB.setHub(module);
