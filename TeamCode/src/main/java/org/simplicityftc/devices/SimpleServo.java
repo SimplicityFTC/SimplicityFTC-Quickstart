@@ -1,19 +1,14 @@
 package org.simplicityftc.devices;
 
 import com.qualcomm.hardware.lynx.LynxNackException;
-import com.qualcomm.hardware.lynx.commands.core.LynxGetServoConfigurationCommand;
-import com.qualcomm.hardware.lynx.commands.core.LynxGetServoEnableCommand;
 import com.qualcomm.hardware.lynx.commands.core.LynxSetServoConfigurationCommand;
 import com.qualcomm.hardware.lynx.commands.core.LynxSetServoEnableCommand;
 import com.qualcomm.hardware.lynx.commands.core.LynxSetServoPulseWidthCommand;
-import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.util.Range;
 
 import org.simplicityftc.logger.Logger;
 import org.simplicityftc.util.SimpleOpMode;
 import org.simplicityftc.util.math.SimpleMath;
-
-import java.util.Arrays;
 
 
 public class SimpleServo {
@@ -29,12 +24,19 @@ public class SimpleServo {
     private boolean shouldUpdate = true;
 
     public SimpleServo(Hub hub, int port) {
-        if(port < 0 || port > 5) throw new IllegalArgumentException("Servo port must be between 0 and 5");
+        if (port < 0 || port > 5) {
+            throw new IllegalArgumentException("Servo port must be between 0 and 5");
+        }
         this.hub = hub;
         this.port = port;
 
         setFramePeriod(20000);
-        new LynxSetServoEnableCommand(hub.getLynxModule(), port, true);
+
+        try {
+            new LynxSetServoEnableCommand(hub.getLynxModule(), port, true).send();
+        } catch (InterruptedException | LynxNackException exception) {
+            Logger.getInstance().add(Logger.LogType.ERROR, exception.getMessage());
+        }
 
         SimpleOpMode.deviceUpdateMethods.add(this::update);
     }
@@ -94,7 +96,6 @@ public class SimpleServo {
                     port,
                     pwm
             ).send();
-            //Logger.getInstance().add(Logger.LogType.DEBUG, "servo configuration" + Arrays.toString(new LynxGetServoConfigurationCommand(hub.getLynxModule(), port).sendReceive().toPayloadByteArray()));
         }
         catch (InterruptedException | LynxNackException exception) {
             Logger.getInstance().add(Logger.LogType.ERROR, exception.getMessage());

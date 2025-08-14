@@ -27,7 +27,9 @@ public enum Hub {
     }
 
     Hub(int canId) {
-        if(canId < 1 || canId > 10) throw new IllegalArgumentException("Port must be between 1 and 10");
+        if (canId < 1 || canId > 10) {
+            throw new IllegalArgumentException("Port must be between 1 and 10");
+        }
         this.canId = canId;
     }
 
@@ -43,7 +45,9 @@ public enum Hub {
     }
 
     public void readData() {
-        if (this.lynxModule == null) throw new RuntimeException("Attempt to read data from null Lynx module");
+        if (this.lynxModule == null) {
+            throw new RuntimeException("Attempt to read data from null Lynx module");
+        }
 
         this.lynxModule.clearBulkCache();
 
@@ -84,10 +88,6 @@ public enum Hub {
                         Hub.EXPANSION_HUB.setHub(module);
                     }
                 }
-            }
-            for (int i = 0; i < 6; i += 1) {
-                try {
-                } catch (InterruptedException | LynxNackException ignored) { }
             }
         }
     }
