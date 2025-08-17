@@ -1,8 +1,11 @@
 package org.simplicityftc.commandbase;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Usage:
@@ -62,5 +65,11 @@ public class SequentialCommand extends Command {
             commands.remove(0);
 
         return false;
+    }
+
+    @NonNull
+    @Override
+    public Command clone() {
+        return new SequentialCommand(getCommandName(), commands.stream().map(Command::clone).collect(Collectors.toList()));
     }
 }

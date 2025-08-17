@@ -1,5 +1,7 @@
 package org.simplicityftc.commandbase;
 
+import androidx.annotation.NonNull;
+
 /**
  * Usage:
  * If using a boolean returning function:
@@ -29,5 +31,11 @@ public class ConditionalCommand extends Command {
     @Override
     public boolean run() {
         return function.run();
+    }
+
+    @NonNull
+    @Override
+    public Command clone() {
+        return new ConditionalCommand(getCommandName(), function);
     }
 }

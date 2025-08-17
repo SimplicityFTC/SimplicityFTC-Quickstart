@@ -1,5 +1,7 @@
 package org.simplicityftc.commandbase;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -60,5 +62,11 @@ public class ParallelCommand extends Command {
                 .collect(Collectors.toList());
 
         return false;
+    }
+
+    @NonNull
+    @Override
+    public Command clone() {
+        return new ParallelCommand(getCommandName(), commands.stream().map(Command::clone).collect(Collectors.toList()));
     }
 }

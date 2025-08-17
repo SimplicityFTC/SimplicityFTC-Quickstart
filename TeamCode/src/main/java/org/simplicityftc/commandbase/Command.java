@@ -3,7 +3,7 @@ package org.simplicityftc.commandbase;
 import androidx.annotation.NonNull;
 
 public abstract class Command implements Cloneable {
-    private String commandName = "";
+    private String commandName = null;
     protected Command(String commandName) {
         this.commandName = commandName;
     }
@@ -20,17 +20,11 @@ public abstract class Command implements Cloneable {
      */
     @NonNull
     @Override
-    public Command clone() {
-        try {
-            return (Command) super.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new AssertionError();
-        }
-    }
+    public abstract Command clone();
 
     /**
-     * Gets the name of the command
-     * @return the name of the command
+     * Gets the name of the command. If the command doesn't have a name, it returns null.
+     * @return the name of the command or null
      */
     public String getCommandName() {
         return commandName;

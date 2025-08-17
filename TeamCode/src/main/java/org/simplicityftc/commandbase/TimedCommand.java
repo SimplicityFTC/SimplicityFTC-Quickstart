@@ -1,6 +1,8 @@
 package org.simplicityftc.commandbase;
 
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -69,7 +71,19 @@ public class TimedCommand extends Command {
         if(timer == null)
             timer = new ElapsedTime();
 
-        //TODO: test if this works
-        return timer.seconds() >= timeoutSeconds || function.run().equals(true);
+        // TODO: Check void timed commands
+        Object result = function.run();
+
+        if (result instanceof Boolean) {
+            return timer.seconds() >= timeoutSeconds || (Boolean) result;
+        } else {
+            return timer.seconds() >= timeoutSeconds;
+        }
+    }
+
+    @NonNull
+    @Override
+    public Command clone() {
+        return new TimedCommand(getCommandName(), function, timeoutSeconds);
     }
 }

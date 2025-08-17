@@ -1,5 +1,7 @@
 package org.simplicityftc.commandbase;
 
+import androidx.annotation.NonNull;
+
 /**
  * Usage:
  * new InstantCommand(() -> class.method());
@@ -56,6 +58,12 @@ public class InstantCommand extends Command {
     public boolean run() {
         voidFunction.run();
         return true;
+    }
+
+    @NonNull
+    @Override
+    public Command clone() {
+        return new InstantCommand(getCommandName(), voidFunction);
     }
 }
 

@@ -6,7 +6,6 @@ when the class is created.
  */
 
 import com.qualcomm.robotcore.util.ElapsedTime;
-
 public class MotionProfile {
     private final double startPosition;
     private final double startVelocity;

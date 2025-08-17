@@ -1,6 +1,8 @@
 package org.simplicityftc.commandbase;
 
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -36,5 +38,11 @@ public class SleepCommand extends Command {
 
         //TODO: test if this works
         return timer.seconds() >= timeoutSeconds;
+    }
+
+    @NonNull
+    @Override
+    public Command clone() {
+        return new SleepCommand(getCommandName(), timeoutSeconds);
     }
 }
