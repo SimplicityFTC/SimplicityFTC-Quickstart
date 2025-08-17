@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  * This class schedules and runs multiple types of commands
  */
 public class CommandScheduler {
-    private static CommandScheduler scheduler;
+    private static CommandScheduler INSTANCE;
     private List<Command> commands;
     private Map<String, List<String>> conflictMap;
 
@@ -23,20 +23,29 @@ public class CommandScheduler {
     }
 
     /**
-     * This function ensures there is only one active instance of the CommandScheduler and is used
+     * This method ensures there is only one active instance of the CommandScheduler and is used
      * to access said instance.
      * @return The unique instance of CommandScheduler.
      */
     public static CommandScheduler getInstance() {
-        if (scheduler == null)
-            scheduler = new CommandScheduler();
-        return scheduler;
+        if (INSTANCE == null) {
+            INSTANCE = new CommandScheduler();
+        }
+        return INSTANCE;
     }
 
     /**
-     * This function clears the list of active commands, should usually be called in init.
+     * This method clears both the commands and the declared conflicts.
      */
     public void reset() {
+        clearCommands();
+        clearConflicts();
+    }
+
+    /**
+     * This method clears the list of active commands.
+     */
+    public void clearCommands() {
         commands.clear();
     }
 
@@ -77,6 +86,10 @@ public class CommandScheduler {
         }
     }
 
+    /**
+     * This function removes one or more commands from the list of scheduled commands.
+     * @param commandNames The name of the commands to be removed.
+     */
     private void remove(List<String> commandNames) {
         for (String commandName : commandNames) {
             remove(commandName);
@@ -147,5 +160,9 @@ public class CommandScheduler {
         for (String commandName : commandNames) {
             conflictMap.put(commandName, commandNames.stream().filter(c -> !c.equals(commandName)).collect(Collectors.toList()));
         }
+    }
+
+    public void clearConflicts() {
+        conflictMap = new HashMap<>();
     }
 }

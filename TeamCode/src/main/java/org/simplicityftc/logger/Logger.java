@@ -30,6 +30,7 @@ public class Logger {
         WARN,
         ERROR,
         COMMAND,
+        NODE,
         VOLTAGE,
         OVER_CURRENT,
         REFRESH_RATE;
@@ -48,6 +49,8 @@ public class Logger {
                     return "[ERROR]";
                 case COMMAND:
                     return "[COMMAND]";
+                case NODE:
+                    return "[NODE]";
                 case VOLTAGE:
                     return "[VOLTAGE]";
                 case OVER_CURRENT:
