@@ -13,7 +13,8 @@ import org.simplicityftc.commandbase.CommandScheduler;
 import org.simplicityftc.devices.Hub;
 import org.simplicityftc.devices.SimpleVoltageSensor;
 import org.simplicityftc.logger.Logger;
-import org.simplicityftc.logicnodes.AutonomousNodes;
+import org.simplicityftc.logicnodes.NodeManager;
+import org.simplicityftc.subsystemmanager.SubsystemManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,16 +27,23 @@ public abstract class SimpleOpMode extends LinearOpMode{
 
     public static CommandScheduler commandScheduler = CommandScheduler.getInstance();
     public static Logger logger = Logger.getInstance();
-    public static AutonomousNodes autoNodes = AutonomousNodes.getInstance();
+    public static NodeManager nodeManager = NodeManager.getInstance();
+    public static SubsystemManager subsystemManager = SubsystemManager.getInstance();
+
     private static final ElapsedTime voltageLogTimer = new ElapsedTime();
     private static final ElapsedTime runtime = new ElapsedTime();
     public static final ElapsedTime deltaTime = new ElapsedTime();
+
     public static final List<Runnable> deviceUpdateMethods = new ArrayList<>();
+
     public OpModeType opModeType = this.getClass().isAnnotationPresent(Autonomous.class) ? OpModeType.AUTONOMOUS : OpModeType.TELE_OP;
+
     private int loopCount = 0;
+    private double loopFrequency;
+    private double voltage;
 
     public abstract void onInit();
-    public void initialize_loop() {}
+    public void initLoop() {}
     public void onStart() {}
     public abstract void run();
 
@@ -54,14 +62,16 @@ public abstract class SimpleOpMode extends LinearOpMode{
 
         commandScheduler.reset();
 
-        autoNodes.clear();
+        subsystemManager.clear();
+
+        nodeManager.clear();
 
         Logger.getInstance().add(Logger.LogType.DEBUG, "number of lynx modules: " + hardwareMap.getAll(LynxModule.class).size());
         Hub.initializeHardware(this.hardwareMap);
 
         onInit();
         while (!isStarted() && !isStopRequested()) {
-            initialize_loop();
+            initLoop();
         }
         waitForStart();
         logger.add(Logger.LogType.INFO, "OpMode started");
@@ -83,7 +93,7 @@ public abstract class SimpleOpMode extends LinearOpMode{
 
             // This runs the autonomous nodes logic
             if (opModeType == OpModeType.AUTONOMOUS) {
-                autoNodes.run();
+                nodeManager.run();
             }
 
             // This is the user's run method
@@ -93,11 +103,16 @@ public abstract class SimpleOpMode extends LinearOpMode{
             // This runs the command queue
             commandScheduler.run();
 
+            // THis runs the read, compute, write methods of the subsystems
+            subsystemManager.run();
+
             if (voltageLogTimer.seconds() >= 0.5) {
-                logger.add(Logger.LogType.VOLTAGE, "Current voltage is: " + SimpleVoltageSensor.getVoltage() + " V");
+                voltage = SimpleVoltageSensor.getVoltage();
+                logger.add(Logger.LogType.VOLTAGE, "Current voltage is: " + voltage + " V");
                 voltageLogTimer.reset();
             }
-            logger.add(Logger.LogType.REFRESH_RATE, "Refresh rate is: " + ++loopCount / runtime.seconds()  + " Hz");
+            loopFrequency = ++loopCount / runtime.seconds();
+            logger.add(Logger.LogType.REFRESH_RATE, "Refresh rate is: " + loopFrequency + " Hz");
         }
     }
 }

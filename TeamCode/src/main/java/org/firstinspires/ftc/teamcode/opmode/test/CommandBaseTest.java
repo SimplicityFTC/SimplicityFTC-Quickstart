@@ -18,7 +18,7 @@ public class CommandBaseTest extends SimpleOpMode {
     public void onInit(){ }
 
     @Override
-    public void initialize_loop(){ }
+    public void initLoop(){ }
 
     @Override
     public void onStart(){

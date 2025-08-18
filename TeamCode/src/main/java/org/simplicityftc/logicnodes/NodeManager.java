@@ -8,14 +8,14 @@ import org.simplicityftc.logger.Logger;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AutonomousNodes {
+public class NodeManager {
     private Map<String, Node> nodeMap;
     private Node currentNode;
-    private static AutonomousNodes INSTANCE;
+    private static NodeManager INSTANCE;
     private boolean scheduledNode;
     private boolean reachedEnd;
 
-    private AutonomousNodes() {
+    private NodeManager() {
         nodeMap = new HashMap<>();
         scheduledNode = false;
         reachedEnd = false;
@@ -26,9 +26,9 @@ public class AutonomousNodes {
      * This method returns the singleton instance of the Autonomous nodes class.
      * @return The unique instance of the AutoNodes class.
      */
-    public static AutonomousNodes getInstance() {
+    public static NodeManager getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new AutonomousNodes();
+            INSTANCE = new NodeManager();
             return INSTANCE;
         }
         return INSTANCE;
