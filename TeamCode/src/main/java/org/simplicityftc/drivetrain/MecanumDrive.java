@@ -113,11 +113,12 @@ public class MecanumDrive extends Drivetrain {
             headingManuallyControlled = true;
             //heading += K_STATIC*Math.signum(heading); //compensate for static friction for more precise control?
         } else if (headingLock) {
-            if (headingVelocity < Math.toRadians(10) && headingManuallyControlled) {
+            if (/* headingVelocity < Math.toRadians(10) && */ headingManuallyControlled) {
                 headingManuallyControlled = false;
                 targetHeading = localizer.getPose().getHeading();
             }
-            heading = headingController.calculate(localizer.getPose().getHeading(), targetHeading);
+            double delta = Math.atan2(Math.sin(targetHeading - localizer.getPose().getHeading()), Math.cos(targetHeading - localizer.getPose().getHeading()));
+            heading = headingController.calculate(0, -delta);
         }
 
         double denominator = Math.max(Math.abs(x) + Math.abs(y) + Math.abs(heading), 1);
