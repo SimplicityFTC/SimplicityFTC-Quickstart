@@ -82,6 +82,9 @@ public class PDFSController {
         return output;
     }
 
+    public void setErrorThreshold(double errorThreshold) {
+        this.errorThreshold = errorThreshold;
+    }
 
     /**
      * @param multiplier value between -1 and 1
